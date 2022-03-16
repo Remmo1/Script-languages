@@ -1,4 +1,4 @@
 @ECHO OFF
-FOR /F %%A IN ('dir /b /s /ad %1^|find /c /v "" ') DO SET COUNT=%%A
+FOR /F %%A IN ('DIR /B /S /AD %1^|FIND /C /V "" ') DO SET COUNT=%%A
 ECHO %COUNT%
 PAUSE
