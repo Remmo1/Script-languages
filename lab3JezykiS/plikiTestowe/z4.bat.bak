@@ -1,2 +1,0 @@
-@ECHO OFF
-DIR *%1 /S /C | DIR "*" | FIND "." | FIND /V "DIR" | SORT /+30 /R 

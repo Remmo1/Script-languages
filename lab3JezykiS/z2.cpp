@@ -21,7 +21,7 @@ int checkErrorAndShow(std :: vector<std :: string>& input, char* argv[], int Npo
 		return 2;
 	
 	for (int i = 0; i < numberOfLines; i++)
-		std :: cout << input[i + numberOfLines] << std :: endl;
+		std :: cout << input[i + lineDiff] << std :: endl;
 	
 	return 0;
 }
@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
 	while (std :: getline(std :: cin, line))
 		input.push_back(line);
 	
-	if (std::count(input.begin(), input.end(), "/S"))
+	if (std::count(input.begin(), input.end(), "/S") || std::count(input.begin(), input.end(), "/s"))
 		return checkErrorAndShow(input, argv, 2, true);
 	else 
 		return checkErrorAndShow(input, argv, 1, false);
