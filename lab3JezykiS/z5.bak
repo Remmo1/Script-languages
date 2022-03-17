@@ -1,7 +1,0 @@
-copyFiles=copy $1 $2
-copyFolders=xcopy /S /E $1 $2
-showPattern=dir *.$1
-showAmountOfFolders=FOR /F %%A IN ('DIR /B /S /AD %1^|FIND /C /V "" ') DO SET COUNT=%%A
-ECHO %COUNT%
-
-
