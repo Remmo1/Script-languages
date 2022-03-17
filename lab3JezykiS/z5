@@ -1,0 +1,8 @@
+copyFiles=copy $1 $2
+copyFolders=xcopy /S /E $1 $2
+showPattern=dir *.$1
+showAmountOfFolders=FOR /F %%A IN ('DIR /B /S /AD $1^|FIND /C /V "" ') DO SET COUNT=%%A
+ECHO %COUNT%
+showNSmallest=DIR /C /S /A-D %1 | FIND /V "Directory" | FIND ":" | SORT /+18 | head $2
+showNGreatest=DIR /C /S /A-D %1 | FIND /V "Directory" | FIND ":" | SORT /+18 /r | head $2
+
