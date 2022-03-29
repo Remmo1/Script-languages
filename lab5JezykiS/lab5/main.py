@@ -1,15 +1,36 @@
-# Zadanie 1
 import sys
+from fastnumbers import isfloat
 
-list = []
 
-for line in sys.stdin:
-    for var in line.split():
-        if var == '\n': break
-        list.append(int(var))
+# Zadanie 1
 
-for i in range(0, len(list)):
-    print(list[i])
+msg = "Podaj liczbę kandydata na maksimum lub zakończ (2 razy enter): "
+lineFromUser = input(msg)
+maxiumum = lineFromUser
+
+while lineFromUser != "":
+    if lineFromUser.isdigit() and int(lineFromUser):
+        maximum = int(lineFromUser)
+    lineFromUser = input(msg)
+
+print("Maksimum: ", maximum)
+
+# Zadanie 2
+msg = "Podaj liczbę do średniej lub zakończ (2 razy enter): "
+lineFromUser = input(msg)
+counter = 0
+sum = 0
+
+while lineFromUser != "":
+    if lineFromUser.isdigit():
+        sum = sum + int(lineFromUser)
+    counter = counter + 1
+    lineFromUser = input(msg)
+
+if counter != 0:
+    print("Średnia wynosi: ", "%.3f" % round(int(sum)/int(counter), 3))
+else:
+    print("Średnia wynosi zero")
 
 
 
@@ -51,12 +72,33 @@ print("The next prime number is: ", find_next_prime(someNumber))
 
 startNumber = int(input("Podaj liczbe startowa: "))
 amountOfNumbers = int(input("Podaj ile liczb wypisac: "))
-begin = startNumber + 1
+begin = startNumber
 
 for i in range(0, amountOfNumbers):
     next = find_next_prime(begin)
     print(next)
     begin = next
+
+
+# zadanie 4
+
+msg = "Podaj liczbę (lub 2 x enter): "
+step = int(input("Podaj krok: "))
+lineFromUser = input(msg)
+
+avr = 0
+actual = 0
+next = 0
+result = []
+
+while lineFromUser != "":
+    if isfloat(lineFromUser):
+        next = float(lineFromUser)
+        result.append( (next + actual) / 2 )
+        actual = next
+    lineFromUser = input(msg)
+
+print(result[1::])
 
 # zadanie 5
 
