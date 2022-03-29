@@ -1,3 +1,20 @@
+# Zadanie 1
+import sys
+
+list = []
+
+for line in sys.stdin:
+    for var in line.split():
+        if var == '\n': break
+        list.append(int(var))
+
+for i in range(0, len(list)):
+    print(list[i])
+
+
+
+# ===================== ZADANIE 3 =========================
+
 # zadanie 1
 
 def check_is_it_palindrom(word):
@@ -41,4 +58,22 @@ for i in range(0, amountOfNumbers):
     print(next)
     begin = next
 
+# zadanie 5
 
+precision = float(input("Podaj dokladnosc: "))
+
+actual = 1
+next = 4/3
+counter = 2
+result = next
+
+while True:
+    if abs(next - actual) < precision:
+        break
+    else:
+        actual = next
+        next = ( 4 * counter * counter ) / ( ( 4 * counter * counter ) - 1)
+        result = next * result
+        counter = counter + 1
+
+print(str(result * 2))
