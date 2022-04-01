@@ -1,12 +1,12 @@
 # zadanie 1
 
 import numpy as np
-import pandas as pd
+
 
 def levenshtein_distance(s, t):
     m = len(s)
     n = len(t)
-    d = np.empty( (m, n) )
+    d = np.empty((m, n))
 
     for i in range(0, m):
         d[i][0] = i
@@ -26,24 +26,13 @@ def levenshtein_distance(s, t):
             )
     return d[m - 1][n - 1]
 
+
 print(levenshtein_distance('pies', 'pies'))
 print(levenshtein_distance('granit', 'granat'))
 print(levenshtein_distance('orczyk', 'oracz'))
 print(levenshtein_distance('marka', 'ariada'))
 
-
 # zadanie 2
-
-
-df2 = pd.DataFrame([[1, 2], [4, 5], [7, 8]],
-
-     index=['cobra', 'viper', 'sidewinder'],
-
-     columns=['max_speed', 'shield'])
-
-print(df2.loc['viper'])
-
-
 
 FILENAME = 'covid.txt'
 country = input('Podaj nazwe kraju: ')
@@ -57,4 +46,17 @@ while True:
     except ValueError:
         print('Podaj liczbe od 1 do 12!!!')
 
-df = pd.read_csv(FILENAME, delimiter = "\t", header = None)
+file = open(FILENAME, 'r')
+next(file)
+lines = file.readlines()
+searched = []
+
+for line in lines:
+    if line.split('	')[6] == country and int(line.split('	')[2]) == month:
+        searched.append(line)
+
+sumOfCases = 0
+for line in searched:
+    sumOfCases = sumOfCases + int(line.split('	')[4])
+
+print("Suma z miesiaca %d dla kraju %s jest rowna: %d" % (month, country, sumOfCases))
