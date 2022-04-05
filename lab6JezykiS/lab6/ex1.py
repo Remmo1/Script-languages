@@ -1,7 +1,4 @@
-# zadanie 1
-
 import numpy as np
-
 
 def levenshtein_distance(s, t):
     m = len(s)
@@ -31,32 +28,3 @@ print(levenshtein_distance('pies', 'pies'))
 print(levenshtein_distance('granit', 'granat'))
 print(levenshtein_distance('orczyk', 'oracz'))
 print(levenshtein_distance('marka', 'ariada'))
-
-# zadanie 2
-
-FILENAME = 'covid.txt'
-country = input('Podaj nazwe kraju: ')
-
-while True:
-    try:
-        month = int(input('Podaj miesiac (numer od 1 do 12): '))
-        if month < 1 or month > 12:
-            raise ValueError
-        break
-    except ValueError:
-        print('Podaj liczbe od 1 do 12!!!')
-
-file = open(FILENAME, 'r')
-next(file)
-lines = file.readlines()
-searched = []
-
-for line in lines:
-    if line.split('	')[6] == country and int(line.split('	')[2]) == month:
-        searched.append(line)
-
-sumOfCases = 0
-for line in searched:
-    sumOfCases = sumOfCases + int(line.split('	')[4])
-
-print("Suma z miesiaca %d dla kraju %s jest rowna: %d" % (month, country, sumOfCases))
