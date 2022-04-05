@@ -1,6 +1,4 @@
-import sys
 from fastnumbers import isfloat
-
 
 # Zadanie 1
 
@@ -19,19 +17,18 @@ print("Maksimum: ", maximum)
 msg = "Podaj liczbę do średniej lub zakończ (2 razy enter): "
 lineFromUser = input(msg)
 counter = 0
-sum = 0
+sumToAvr = 0
 
 while lineFromUser != "":
     if lineFromUser.isdigit():
-        sum = sum + int(lineFromUser)
+        sumToAvr = sumToAvr + int(lineFromUser)
     counter = counter + 1
     lineFromUser = input(msg)
 
 if counter != 0:
-    print("Średnia wynosi: ", "%.3f" % round(int(sum)/int(counter), 3))
+    print("Średnia wynosi: ", "%.3f" % round(int(sumToAvr) / int(counter), 3))
 else:
     print("Średnia wynosi zero")
-
 
 
 # ===================== ZADANIE 3 =========================
@@ -42,17 +39,19 @@ def check_is_it_palindrom(word):
     return word == word[::-1]
 
 
-print(check_is_it_palindrom("aabbbbb"))
-print(check_is_it_palindrom("ala"))
+wordF = input("Podaj napis do sprawdzenia: ")
+
+print(check_is_it_palindrom(wordF))
 
 
 # zadanie 2
 
 def check_is_it_prime(number):
-    for i in range(2, number):
-        if number % i == 0:
+    for j in range(2, number):
+        if number % j == 0:
             return False
     return True
+
 
 def find_next_prime(number):
     if number <= 1:
@@ -65,6 +64,7 @@ def find_next_prime(number):
         else:
             n = n + 1
 
+
 someNumber = int(input("Podaj liczbe: "))
 print("The next prime number is: ", find_next_prime(someNumber))
 
@@ -75,9 +75,9 @@ amountOfNumbers = int(input("Podaj ile liczb wypisac: "))
 begin = startNumber
 
 for i in range(0, amountOfNumbers):
-    next = find_next_prime(begin)
-    print(next)
-    begin = next
+    nextNumber = find_next_prime(begin)
+    print(nextNumber)
+    begin = nextNumber
 
 
 # zadanie 4
@@ -86,36 +86,35 @@ msg = "Podaj liczbę (lub 2 x enter): "
 step = int(input("Podaj krok: "))
 lineFromUser = input(msg)
 
-avr = 0
-actual = 0
-next = 0
+numbers = []
 result = []
 
 while lineFromUser != "":
     if isfloat(lineFromUser):
-        next = float(lineFromUser)
-        result.append( (next + actual) / 2 )
-        actual = next
+        numbers.append(float(lineFromUser))
+        if len(numbers) == step:
+            result.append(sum(numbers) / step)
+            numbers.pop(0)
     lineFromUser = input(msg)
 
-print(result[1::])
+print(result)
 
 # zadanie 5
 
 precision = float(input("Podaj dokladnosc: "))
 
-actual = 1
-next = 4/3
+actualN = 1
+nextNumber = 4 / 3
 counter = 2
-result = next
+result = nextNumber
 
 while True:
-    if abs(next - actual) < precision:
+    if abs(nextNumber - actualN) < precision:
         break
     else:
-        actual = next
-        next = ( 4 * counter * counter ) / ( ( 4 * counter * counter ) - 1)
-        result = next * result
+        actualN = nextNumber
+        nextNumber = (4 * counter * counter) / ((4 * counter * counter) - 1)
+        result = nextNumber * result
         counter = counter + 1
 
 print(str(result * 2))
