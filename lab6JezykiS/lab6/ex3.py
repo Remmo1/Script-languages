@@ -22,7 +22,7 @@ args = parser.parse_args()
 
 resultList = []
 for name in names:
-    dis = levenshtein_distance(args.country, name)
+    dis = levenshtein_distance(args.country.lower(), name.lower())
     if dis <= args.isnear:
         resultList.append((name, dis))
 
