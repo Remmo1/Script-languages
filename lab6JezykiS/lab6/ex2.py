@@ -12,7 +12,7 @@ group.add_argument('-v', '--verbose', action='store_true', help='wyswietl wszyst
 
 args = parser.parse_args()
 
-FILENAME = '/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/lab6JezykiS/lab6/covid.txt'
+FILENAME = '/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/lab6JezykiS/covid.txt'
 
 df = pd.read_csv(FILENAME, delimiter='\t')
 
