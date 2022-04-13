@@ -16,8 +16,3 @@ lines = open_file(FILEPATH)
 all_cases = create_all_cases(lines)
 for i in all_cases:
     print(i)
-
-print('some new feature')
-for i in range(1, 101):
-    print(i)
-
