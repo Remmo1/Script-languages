@@ -1,3 +1,9 @@
+import functools
+from timeit import default_timer as timer
+
+# ====================== Zadanie 1 ===============================
+#               Tworzenie potrzebnych struktur
+
 FILEPATH = '/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/lab7JezykiS/covid.txt'
 
 
@@ -83,3 +89,82 @@ lines = open_file(FILEPATH)
 all_cases = create_all_cases(lines)
 by_country = create_by_country(lines)
 by_date = create_by_date(lines)
+
+# ====================== Zadanie 2 ===============================
+
+SEARCHEDDATE = (2020, 11, 25)
+
+
+# dla all_cases
+def for_date_a(year, month, day):
+    # uwaga na zmiane kolejnosci w all_cases !!!!!
+    # teraz jest:
+    # - nazwa       ->  line[0]
+    # - rok         ->  line[1]
+    # - miesiac     ->  line[2]
+    # - dzien       ->  line[3]
+    # - zgony       ->  line[4]
+    # - przypadki   ->  line[5]
+
+    start = timer()
+
+    sum_for_all = functools.reduce(
+        lambda acc, line:
+        (acc[0] + line[4], acc[1] + line[5]) if line[1] == year and line[2] == month and line[3] == day
+        else (acc[0] + 0, acc[1] + 0),
+        all_cases,
+        (0, 0)
+    )
+
+    end = timer()
+    print((end - start) * 1000)
+
+    return sum_for_all
+
+
+print(for_date_a(SEARCHEDDATE[0], SEARCHEDDATE[1], SEARCHEDDATE[2]))
+
+
+# dla by_date
+def for_date_d(year, month, day):
+    start = timer()
+
+    sum_for_all = (0, 0)
+    key = (year, month, day)
+    if key in by_date:
+        for line in by_date[key]:
+            sum_for_all = (sum_for_all[0] + line[1], sum_for_all[1] + line[2])
+
+    end = timer()
+    print((end - start) * 1000)
+
+    return sum_for_all
+
+
+print(for_date_d(SEARCHEDDATE[0], SEARCHEDDATE[1], SEARCHEDDATE[2]))
+
+
+# dla by_country
+def for_date_c(year, month, day):
+    # kolejnosc w by_country:
+    # - rok         ->  line[0]
+    # - miesiac     ->  line[1]
+    # - dzien       ->  line[2]
+    # - zgony       ->  line[3]
+    # - przypadki   ->  line[4]
+    start = timer()
+
+    sum_for_all = (0, 0)
+
+    for line in by_country.values():
+        for number in line:
+            if number[0] == year and number[1] == month and number[2] == day:
+                sum_for_all = (sum_for_all[0] + number[3], sum_for_all[1] + number[4])
+
+    end = timer()
+    print((end - start) * 1000)
+
+    return sum_for_all
+
+
+print(for_date_c(SEARCHEDDATE[0], SEARCHEDDATE[1], SEARCHEDDATE[2]))
