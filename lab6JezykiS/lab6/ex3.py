@@ -2,7 +2,8 @@ import pandas as pd
 import argparse
 from ex1 import levenshtein_distance
 
-FILENAME = '/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/lab6JezykiS/covid.txt'
+FILENAME_UBUNTU = '/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/lab6JezykiS/covid.txt'
+FILENAME_WINDOWS = 'C:\\Uczelnia\\Semestr4\\Jezyki Skryptowe\\laby\\lab6JezykiS\\covid.txt'
 
 
 def readCountryNames(path):
@@ -12,7 +13,7 @@ def readCountryNames(path):
     return df
 
 
-names = readCountryNames(FILENAME)
+names = readCountryNames(FILENAME_WINDOWS)
 
 parser = argparse.ArgumentParser(description='Wyszukiwanie podobnych nazw krajow')
 parser.add_argument('-c', '--country', type=str, metavar='', required=True)

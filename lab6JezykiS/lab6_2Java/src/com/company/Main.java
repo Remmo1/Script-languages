@@ -6,7 +6,8 @@ import java.io.IOException;
 
 public class Main {
 
-    private static final String FILENAME = "/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/lab6JezykiS/covid.txt";
+    private static final String FILENAME_UBUNTU = "/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/lab6JezykiS/covid.txt";
+    private static final String FILENAME_WINDOWS = "C:\\Uczelnia\\Semestr4\\Jezyki Skryptowe\\laby\\lab6JezykiS\\covid.txt";
 
     public static void openFile(String fileName, String country, int month) {
         String line;
@@ -39,7 +40,7 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            openFile(FILENAME, args[0], Integer.parseInt(args[1]));
+            openFile(FILENAME_WINDOWS, args[0], Integer.parseInt(args[1]));
         } catch (IndexOutOfBoundsException e) {
             System.out.println("Blad! Sprobuj ponownie, musisz podac dokladnie 2 argumenty w linii konsoli");
         }

@@ -12,9 +12,10 @@ group.add_argument('-v', '--verbose', action='store_true', help='wyswietl wszyst
 
 args = parser.parse_args()
 
-FILENAME = '/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/lab6JezykiS/covid.txt'
+FILENAME_UBUNTU = '/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/lab6JezykiS/covid.txt'
+FILENAME_WINDOWS = 'C:\\Uczelnia\\Semestr4\\Jezyki Skryptowe\\laby\\lab6JezykiS\\covid.txt'
 
-df = pd.read_csv(FILENAME, delimiter='\t')
+df = pd.read_csv(FILENAME_WINDOWS, delimiter='\t')
 
 sumOfCovid = 0
 for index, row in df.iterrows():
@@ -27,33 +28,3 @@ elif args.verbose:
     print('Suma przypadkow z miesiaca %s dla kraju %s wynosi %s' % (args.month, args.country, sumOfCovid))
 else:
     print('Suma przypadkow = %s' % sumOfCovid)
-
-"""
-
-country = input('Podaj nazwe kraju: ')
-
-while True:
-    try:
-        month = int(input('Podaj miesiac (numer od 1 do 12): '))
-        if month < 1 or month > 12:
-            raise ValueError
-        break
-    except ValueError:
-        print('Podaj liczbe od 1 do 12!!!')
-
-file = open(FILENAME, 'r')
-next(file)
-lines = file.readlines()
-searched = []
-
-for line in lines:
-    if line.split('	')[6] == country and int(line.split('	')[2]) == month:
-        searched.append(line)
-
-sumOfCases = 0
-for line in searched:
-    sumOfCases = sumOfCases + int(line.split('	')[4])
-
-print("Suma z miesiaca %d dla kraju %s jest rowna: %d" % (month, country, sumOfCases))
-
-"""
