@@ -30,16 +30,8 @@ Cały algorytm polega na sprawdzeniu który koszt jest najmniejszy w dwóch przy
           
         i dodajemy do tej liczby 1.
 
-Wynikowa macierz wygląda tak:
 
-    a r i a d a
-  m 0 1 2 3 4 5
-  a 1 1 2 2 3 4
-  r 2 1 2 3 3 4
-  k 3 2 2 3 4 4
-  a 4 3 3 2 3 4
- 
-Szukana wartość znajduje się w prawym dolnym rogu i dla tego przypadku wynosi 4.
+  
 
 """
 
