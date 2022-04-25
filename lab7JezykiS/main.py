@@ -1,8 +1,8 @@
 import functools
 from timeit import default_timer as timer
 
-# ====================== Zadanie 1 ===============================
-#               Tworzenie potrzebnych struktur
+# ===================================================== Zadanie 1 =====================================================
+#                                           Tworzenie potrzebnych struktur
 
 FILEPATH = '/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/lab7JezykiS/covid.txt'
 
@@ -90,9 +90,8 @@ all_cases = create_all_cases(lines)
 by_country = create_by_country(lines)
 by_date = create_by_date(lines)
 
-# ====================== Zadanie 2 ===============================
 
-SEARCHEDDATE = (2020, 11, 25)
+# ===================================================== Zadanie 2 =====================================================
 
 
 # dla all_cases
@@ -117,12 +116,9 @@ def for_date_a(year, month, day):
     )
 
     end = timer()
-    print((end - start) * 1000)
+    print(round((end - start) * 1000, 3))
 
     return sum_for_all
-
-
-print(for_date_a(SEARCHEDDATE[0], SEARCHEDDATE[1], SEARCHEDDATE[2]))
 
 
 # dla by_date
@@ -131,17 +127,13 @@ def for_date_d(year, month, day):
 
     sum_for_all = (0, 0)
     key = (year, month, day)
-    if key in by_date:
-        for line in by_date[key]:
-            sum_for_all = (sum_for_all[0] + line[1], sum_for_all[1] + line[2])
+    for line in by_date[key]:
+        sum_for_all = (sum_for_all[0] + line[1], sum_for_all[1] + line[2])
 
     end = timer()
-    print((end - start) * 1000)
+    print(round((end - start) * 1000, 3))
 
     return sum_for_all
-
-
-print(for_date_d(SEARCHEDDATE[0], SEARCHEDDATE[1], SEARCHEDDATE[2]))
 
 
 # dla by_country
@@ -162,9 +154,83 @@ def for_date_c(year, month, day):
                 sum_for_all = (sum_for_all[0] + number[3], sum_for_all[1] + number[4])
 
     end = timer()
-    print((end - start) * 1000)
+    print(round((end - start) * 1000, 3))
 
     return sum_for_all
 
 
+SEARCHEDDATE = (2020, 11, 25)
+
+print(for_date_a(SEARCHEDDATE[0], SEARCHEDDATE[1], SEARCHEDDATE[2]))
+print(for_date_d(SEARCHEDDATE[0], SEARCHEDDATE[1], SEARCHEDDATE[2]))
 print(for_date_c(SEARCHEDDATE[0], SEARCHEDDATE[1], SEARCHEDDATE[2]))
+
+print('\n\n\n\n')
+
+
+# ===================================================== Zadanie 3 =====================================================
+
+# dla all_cases
+def for_country_a(country):
+    start = timer()
+
+    sum_during_covid = functools.reduce(
+        lambda acc, line:
+        (acc[0] + line[4], acc[1] + line[5]) if line[0] == country
+        else (acc[0] + 0, acc[1] + 0),
+        all_cases,
+        (0, 0)
+    )
+
+    end = timer()
+    print(round((end - start) * 1000, 3))
+
+    return sum_during_covid
+
+
+# dla by_date
+def for_country_d(country):
+    # kolejnosc w by_date:
+    # 1. klucz:
+    #       rok         -> line[0]
+    #       miesiac     -> line[1]
+    #       dzien       -> line[2]
+    # 2. wartosc:
+    #       nazwa       -> line[0]
+    #       zgony       -> line[1]
+    #       przypadki   -> line[2]
+
+    start = timer()
+
+    sum_during_covid = (0, 0)
+
+    for line in by_date.values():
+        for case_country in line:
+            if case_country[0] == country:
+                sum_during_covid = (sum_during_covid[0] + case_country[1], sum_during_covid[1] + case_country[2])
+
+    end = timer()
+    print(round((end - start) * 1000, 3))
+
+    return sum_during_covid
+
+
+# użyj by_country
+def for_country_c(country):
+    start = timer()
+
+    sum_during_covid = (0, 0)
+    for line in by_country[country]:
+        sum_during_covid = (sum_during_covid[0] + line[3], sum_during_covid[1] + line[4])
+
+    end = timer()
+    print(round((end - start) * 1000, 3))
+
+    return sum_during_covid
+
+
+SEARCHEDCOUNTRY = 'Poland'
+
+print(for_country_a(SEARCHEDCOUNTRY))
+print(for_country_d(SEARCHEDCOUNTRY))
+print(for_country_c(SEARCHEDCOUNTRY))
