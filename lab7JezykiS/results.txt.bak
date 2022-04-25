@@ -1,0 +1,26 @@
+Wyniki zadań 2 oraz 3 dla danych:
+
+data w zadaniu 2:	(2020, 11, 25)
+kraj w zadaniu 3:	Poland
+
+Czas w ms dokonany dla trzech niezależnych pomiarów:
+
+all_cases:
+2. 9,531	9,583		9,512
+3. 7,829	7,886		7,861
+
+by_date:
+2. 0,08		0,082		0,078
+3. 7,917	8,165		7,910
+
+by_country:
+2. 3,024	3,084		2,967
+3. 0,03		0,031		0,029
+
+Średnio:
+				zadanie 2			zadanie 3
+all_cases		9,542 ms			7,859 ms
+by_date			0,08 ms				7,997 ms
+by_country		3,025 ms			0,03 ms
+
+
