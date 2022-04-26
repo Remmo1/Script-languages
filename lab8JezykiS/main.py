@@ -1,22 +1,15 @@
-class Controlled_text:
-    def __init__(self):
-        self.text = 'empty'
+from Controlled_text import Controlled_text
 
-    @property
-    def text(self):
-        return self.text
+c1 = Controlled_text('text1')
+print(c1.get_text())
+c1.set_text('dasdsadasdadwadewfwefwfesfswf')
+print(c1.get_text())
+c1.set_text('text1')
 
-    @text.setter
-    def text(self, new_text):
-        if new_text == 'empty':
-            raise TypeError('Podana wartosc nie jest prawidlowa!')
-        self.text = new_text
+c2 = Controlled_text('text2')
 
-    def __str__(self):
-        return 'Tekst: %s' % self.text
+print(c1.__lt__(c2))
+print(c2.__lt__(c1))
 
-
-t2 = Controlled_text()
-t2.text = 'new'
-
-print(t2.__str__())
+print(c1.__gt__(c2))
+print(c2.__gt__(c1))
