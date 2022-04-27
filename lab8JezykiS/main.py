@@ -1,4 +1,5 @@
 from Controlled_text import Controlled_text
+from First_name import First_name
 
 c1 = Controlled_text('text1')
 print(c1.get_text())
@@ -13,3 +14,7 @@ print(c2.__lt__(c1))
 
 print(c1.__gt__(c2))
 print(c2.__gt__(c1))
+
+names = First_name.open_file(First_name.FILEPATH)
+f1 = First_name(names, 'Maria')
+f2 = First_name(names, 'Tomasz')
