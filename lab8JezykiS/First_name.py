@@ -34,6 +34,7 @@ class First_name(Controlled_text):
     def __init__(self, names, text):
         super().__init__(text)
         self.names = names
+        self.text = self.text.capitalize()
 
     def show_women(self):
         for name in self.names[0]:

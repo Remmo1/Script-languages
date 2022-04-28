@@ -20,7 +20,6 @@ class Controlled_text:
     # konstruktor
 
     def __init__(self, text):
-        self.text = 'Default'
         self.throw_error_if_text_is_wrong(text)
         self.text = text
 

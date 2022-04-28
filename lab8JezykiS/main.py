@@ -16,5 +16,8 @@ print(c1.__gt__(c2))
 print(c2.__gt__(c1))
 
 names = First_name.open_file(First_name.FILEPATH)
-f1 = First_name(names, 'Maria')
-f2 = First_name(names, 'Tomasz')
+f1 = First_name(names, 'maRiA')
+f2 = First_name(names, 'tOmASz')
+
+print(f1.get_text())
+print(f2.get_text())
