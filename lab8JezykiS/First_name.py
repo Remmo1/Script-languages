@@ -32,9 +32,10 @@ class First_name(Controlled_text):
             return gender_list
 
     def __init__(self, names, text):
-        super().__init__(text)
+        super().__init__(text.capitalize())
         self.names = names
-        self.text = self.text.capitalize()
+        if not self.get_text() in names[0] or self.get_text() in names[1]:
+            self.set_text(self.get_text())
 
     def show_women(self):
         for name in self.names[0]:

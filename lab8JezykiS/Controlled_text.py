@@ -21,33 +21,33 @@ class Controlled_text:
 
     def __init__(self, text):
         self.throw_error_if_text_is_wrong(text)
-        self.text = text
+        self.__text = text
 
     # gettery i settery
 
     def get_text(self):
-        return self.text
+        return self.__text
 
     def set_text(self, text):
         self.throw_error_if_text_is_wrong(text)
-        self.text = text
+        self.__text = text
 
     # operatory
 
     def __lt__(self, other):
-        return self.text < other.text
+        return self.__text < other.get_text()
 
     def __gt__(self, other):
-        return self.text > other.text
+        return self.__text > other.get_text()
 
     def __eq__(self, other):
-        return self.text == other.text
+        return self.__text == other.get_text()
 
     def __le__(self, other):
-        return self.text <= other.text
+        return self.__text <= other.get_text()
 
     def __ge__(self, other):
-        return self.text >= other.text
+        return self.__text >= other.get_text()
 
     def __ne__(self, other):
         return not self.__eq__(other)
