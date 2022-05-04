@@ -35,7 +35,23 @@ class First_name(Controlled_text):
         super().__init__(text.capitalize())
         self.names = names
         if not self.get_text() in names[0] or self.get_text() in names[1]:
-            self.set_text(self.get_text())
+            self.set_text('Nieznane')
+            print('Wolno podawać tylko imiona zawarte w pliku popularneImiona!')
+            
+    def name(self):
+        return self.get_text()
+    
+    def is_male(self):
+        return self.male_name(self.get_text())
+    
+    def is_female(self):
+        return self.female_name(self.get_text())
+    
+    def male_name(self, name_from_user):
+        return name_from_user in self.gender_list[0]
+    
+    def female_name(self, name_from_user):
+        return name_from_user in self.gender_list[1]
 
     def show_women(self):
         for name in self.names[0]:
