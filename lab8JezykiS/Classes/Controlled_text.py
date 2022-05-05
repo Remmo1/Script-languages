@@ -1,6 +1,7 @@
 import functools
 from Errors.InputError import InputError
 
+
 class Controlled_text:
 
     # metody sprawdzajace
@@ -9,7 +10,10 @@ class Controlled_text:
     def check_text(text):
         if str(text).isprintable() and text != ' ':
             try:
-                return functools.reduce(lambda acc, x: (acc and False) if x.isspace() else (acc and True), text)
+                return functools.reduce(
+                    lambda acc, x:
+                    (acc and False) if x.isspace()
+                    else (acc and True), text)
             except TypeError:
                 raise InputError('Podane niepoprawne dane! Ciag %s nie jest poprawny!' % text)
 

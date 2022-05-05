@@ -4,38 +4,38 @@ from Errors.NameException import NameException
 
 class First_name(Controlled_text):
     FILEPATH = '/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/lab8JezykiS/PopularneImiona'
-    gender_list = ([], [])
+    GENDER_LIST = ([], [])
 
     @staticmethod
     def open_file(filename):
-        with open(filename, 'r') as f:
-            lines = f.readlines()
+        # wczytujemy tylko gdy tego nie zrobilismy wczesniej
+        if First_name.GENDER_LIST == ([], []):
+            with open(filename, 'r') as f:
+                lines = f.readlines()
 
-            # Wczytywanie imion kobiet
-            i = 1
-            line = lines[i]
-            while line != '\n':
-                First_name.gender_list[0].append(line[:-1])
-                i = i + 1
+                # Wczytywanie imion kobiet
+                i = 1
                 line = lines[i]
+                while line != '\n':
+                    First_name.GENDER_LIST[0].append(line[:-1])
+                    i = i + 1
+                    line = lines[i]
 
-            # Wczytywanie imion meskich
-            i = i + 2
-            line = lines[i]
-            while i < len(lines):
-                First_name.gender_list[1].append(line[:-1])
-                i = i + 1
-                if i == len(lines):
-                    break
+                # Wczytywanie imion meskich
+                i = i + 2
                 line = lines[i]
+                while i < len(lines):
+                    First_name.GENDER_LIST[1].append(line[:-1])
+                    i = i + 1
+                    if i == len(lines):
+                        break
+                    line = lines[i]
+        return First_name.GENDER_LIST
 
-            return First_name.gender_list
-
-    def __init__(self, names, text):
+    def __init__(self, text):
         super().__init__(text.capitalize())
-        self.gender_list = None
-        self.names = names
-        if self.get_text() not in First_name.gender_list[0] and self.get_text() not in First_name.gender_list[1]:
+        self.GENDER_LIST = None
+        if self.get_text() not in First_name.GENDER_LIST[0] and self.get_text() not in First_name.GENDER_LIST[1]:
             raise NameException('Imie %s nie wystepuje w pliku PopularneImiona i nie mozna go ustawic!' % text)
 
     @property
@@ -50,16 +50,18 @@ class First_name(Controlled_text):
 
     @staticmethod
     def male_name(name_from_user):
-        return name_from_user in First_name.gender_list[1]
+        return name_from_user in First_name.GENDER_LIST[1]
 
     @staticmethod
     def female_name(name_from_user):
-        return name_from_user in First_name.gender_list[0]
+        return name_from_user in First_name.GENDER_LIST[0]
 
-    def show_women(self):
-        for name in self.names[0]:
+    @staticmethod
+    def show_women():
+        for name in First_name.GENDER_LIST[0]:
             print(name)
 
-    def show_men(self):
-        for name in self.names[1]:
+    @staticmethod
+    def show_men():
+        for name in First_name.GENDER_LIST[1]:
             print(name)
