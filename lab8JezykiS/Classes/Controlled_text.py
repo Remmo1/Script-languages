@@ -1,5 +1,5 @@
 import functools
-
+from Errors.InputError import InputError
 
 class Controlled_text:
 
@@ -11,11 +11,11 @@ class Controlled_text:
             try:
                 return functools.reduce(lambda acc, x: (acc and False) if x.isspace() else (acc and True), text)
             except TypeError:
-                raise Exception('Podane niepoprawne dane!')
+                raise InputError('Podane niepoprawne dane! Ciag %s nie jest poprawny!' % text)
 
     def throw_error_if_text_is_wrong(self, text):
         if not self.check_text(text):
-            raise Exception('Podane niepoprawne dane!')
+            raise InputError('Podane niepoprawne dane! Ciag: %s nie jest poprawny!' % text)
 
     # konstruktor
 

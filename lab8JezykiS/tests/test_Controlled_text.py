@@ -1,5 +1,6 @@
 from unittest import TestCase
-from Controlled_text import Controlled_text
+from Classes.Controlled_text import Controlled_text
+
 
 class TestControlled_text(TestCase):
 

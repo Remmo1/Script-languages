@@ -1,0 +1,2 @@
+class PrivilageError(Exception):
+    pass
