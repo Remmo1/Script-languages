@@ -1,0 +1,2 @@
+class IdFormatError(Exception):
+    pass
