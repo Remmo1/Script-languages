@@ -1,3 +1,4 @@
+import functools
 import re
 from random import seed, randint
 from typing import Optional
@@ -84,18 +85,43 @@ def add_person(name: str, last_name: str, email: str, phone_number: str):
 @app.get("/people")
 def get_everybody():
     if PEOPLE:
-        return {PEOPLE[0]}
+        return PEOPLE
     else:
         return {"Nie dodales jeszcze zadnej osoby"}
 
+@app.get("/people/{last_name}")
+def get_by_last_name(last_name: str):
+    result = {}
+    for id in PEOPLE:
+        for data in PEOPLE[id]:
+            if data == last_name:
+                result[id] = PEOPLE[id]
+    return result
+
+
+
+
+
+
 
 """
+
 PEOPLE = {
     1: {"Nowak", "Kamil"},
     2: {"Malgorzata", "Wolska"}
 }
 
-print(PEOPLE[3])
+
+result = {}
+for id in PEOPLE:
+    for data in PEOPLE[id]:
+        if data == "Nowak":
+            result[id] = PEOPLE[id]
+
+for i in result:
+    print(result)
+
+
 
 inventory = {
     1: {

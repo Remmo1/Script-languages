@@ -34,7 +34,6 @@ class First_name(Controlled_text):
 
     def __init__(self, text):
         super().__init__(text.capitalize())
-        self.GENDER_LIST = None
         if self.get_text() not in First_name.GENDER_LIST[0] and self.get_text() not in First_name.GENDER_LIST[1]:
             raise NameException('Imie %s nie wystepuje w pliku PopularneImiona i nie mozna go ustawic!' % text)
 
