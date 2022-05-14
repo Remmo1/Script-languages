@@ -1,14 +1,32 @@
-Aleksandra
-Wolska
-123456@student.pwr.edu.pl
-123456789
+{
+  "name": "aNnA",
+  "last_name": "noWak",
+  "email": "123456@student.pwr.edu.pl",
+  "phone_number": "123456789"
+}
 
-Jan
-Nowak
-jan.nowak@pwr.edu.pl
-987654321
+{
+  "name": "aleKSaNDra",
+  "last_name": "WolsKA",
+  "email": "224455@student.pwr.edu.pl",
+  "phone_number": "222222222"
+}
 
-Kamil
-Nowak
-kamil.nowak@pwr.edu.pl
-111111111
+{
+  "name": "Jan",
+  "last_name": "Nowak",
+  "email": "jan.nowak@pwr.edu.pl",
+  "phone_number": "+48 111111111"
+}
+
+{
+  "name": "kaMIL",
+  "last_name": "NOWAK",
+  "email": "kamil.NowaK@pwr.edu.pl",
+  "phone_number": "333333333"
+}
+
+
+jak wylaczyc:
+sudo lsof -t -i tcp:8000 | xargs kill -9
+

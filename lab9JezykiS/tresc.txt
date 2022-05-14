@@ -1,0 +1,19 @@
+Dzień dobry,
+jako że duża część z państwa chciałaby przygotować aplikację webową więc w liście 9 chciałbym aby państwo stworzyli proste API przy użyciu FASTAPI: https://fastapi.tiangolo.com/#example
+W przykładach powinno być wystarczająco informacji do wykonania zadania.
+
+Dodać:
+POST, gdzie dodajemy osobę która będzie reprezentowana przez imię, nazwisko ,adres email, numer telefonu i przydzielane jest jej ID. Email jest sprawdzany czy jest z domeny pwr.edu.pl i numer telefonu czy polski. Można wykorzystać kod z poprzednich labolatoriów.Jeżeli email lub telefon jest błędny, zwracany jest status 400 z błędem co jest źle. 
+GET który zwraca osobę po nazwisku, jeżeli jest więcej osób o tym samym nazwisku to zwracamy wszystkie
+GET który zwraca osobę i jej informacje po ID
+GET który zwraca wszystkie osoby
+DELETE który usuwa osobę po ID
+
+Podczas realizacji zadania zaleca się stworzenie klasy Person która będzie reprezentować osobę i zawierać potrzebne pola.
+Osoby mogą być przechowywanie w słowniku id->Person.
+
+Sprawdzić czy stworzone API działa przy użyciu biblioteki requests:
+https://docs.python-requests.org/en/latest/
+
+Zadanie proszę wykonać do następnego wtorku. W razie problemów proszę pisać.
+Prześlę jeszcze informacje odnośnie przykładowych projektów, jeśli niektórzy z państwa jednak chcieliby coś zmienić w swoich planach związanych z projektem.
