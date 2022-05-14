@@ -21,8 +21,8 @@ class Pearson(BaseModel):
     phone_number: str
 
 
-# Żeby wykorzystać kod z listy 8 musimy podmienić imię i nazwisko przed dodaniem osoby, ponieważ konstruktor nie
-# pozwala domyślnie na typy napisane przez użytkownika
+# Zeby wykorzystac kod z listy 8 musimy podmienic imie i nazwisko przed dodaniem osoby, poniewaz konstruktor nie
+# pozwala domyslnie na typy napisane przez uzytkownika
 def conversion(pearson: Pearson):
     pearson.name = First_name(pearson.name).get_text()
     pearson.last_name = Last_name(pearson.last_name).get_text()
@@ -82,7 +82,7 @@ def delete_pearson_from_database(pearson_id: str = Query(..., description="Id os
     return {"Success": "Item deleted!"}
 
 
-# generator numerów id
+# generator numerow id
 def id_generator():
     sum_a = 0
     id_n = ''
@@ -94,7 +94,7 @@ def id_generator():
     return id_n
 
 
-# regexy sprawdzające telefon i email
+# regexy sprawdzajace telefon i email
 def check_phone_number(number):
     phone_pattern = re.compile(r'(\+\d\d )?[1-9]\d{2}[ -.]?\d{3}[ -.]?\d{3}')
     matches = phone_pattern.finditer(number)
