@@ -1,0 +1,14 @@
+[DEFAULT]
+icons = /home/remmo/Downloads/Inter/gui/images
+bazowa_geometria = 1386x720+363+360
+
+[snaps]
+obraz_start = start.jpg
+ini_check_dir = /media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/lab10JezykiS/Inter/gui/images
+ini_save_dir = /home/remmo/Downloads/Inter/gui
+
+[selected_pictures]
+
+[pictures_2_view]
+e = /home/remmo/Downloads/Inter/gui/images/start.jpg = 1.0
+
