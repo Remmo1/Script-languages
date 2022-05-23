@@ -3,7 +3,7 @@ Created on 2021-05-18
 
 @author: Andrzej
 """
-
+import random
 import tkinter as tk
 from tkinter import filedialog
 import os
@@ -22,21 +22,36 @@ class Muster_Obraz(BazoweGui):
 
     def __init__(self, master=None):
         super().__init__(master)
+        self.test_image = None
+        self.toolbar_size = None
+        self.store_button = None
+        self.obrazBt = None
+        self.stary_rozmiar = None
+        self.do_pokazania = None
+        self.view_button = None
+        self.snap_no = None
+        self.to_display = None
+        self.to_show = None
+        self.to_check = None
+        self.__view_mode = None
+        self.containers = [
+            "/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/lab10JezykiS/Inter/imageCopies",
+            "/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/lab10JezykiS/Inter/gui/images"
+        ]
         self.icons = ''
 
     def start_pracy(self):
         self.__view_mode = True
-        self.to_check = []  # all input snaps
-        self.to_show = []  # selected snaps
-        self.to_display = []  # what is on the screen
+        self.to_check = []
+        self.to_show = []
+        self.to_display = []
         self.set_pictures2check()
         self.snap_no = -1
         self.view_button = None
         self.uzupelnij_toolbar()
         self.parent.bind("<Configure>", self.zmiana_rozmiaru)
-        nazwa_start = self.konfig["DEFAULT"]["icons"] + "/" + self.konfig[ident]["obraz_start"]
         self.do_pokazania = Exif_dane(
-            "/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/lab10JezykiS/Inter/gui/images/start.jpg"
+            "/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/lab10JezykiS/Inter/imageCopies/butterfly.jpg"
         )
         self.obrazBt = tk.Button(self.robocze, text="start")
         self.obrazBt.pack(fill=tk.Y)
@@ -45,16 +60,23 @@ class Muster_Obraz(BazoweGui):
 
     def uzupelnij_toolbar(self):
         for image, command in (
-                ("/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/lab10JezykiS/Inter/gui/images/browser.gif",
+                ("/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/lab10JezykiS/Inter/gui/images/browser.png",
                  self.show_map),
-                ("/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/lab10JezykiS/Inter/gui/images/larrow.gif",
+                ("/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/lab10JezykiS/Inter/gui/images/larrow.png",
                  self.to_left),
-                ("/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/lab10JezykiS/Inter/gui/images/rarrow.gif",
+                ("/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/lab10JezykiS/Inter/gui/images/rarrow.png",
                  self.to_right),
-                ("/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/lab10JezykiS/Inter/gui/images/uarrow.gif",
+                ("/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/lab10JezykiS/Inter/gui/images/uarrow.png",
                  self.to_top),
-                ("/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/lab10JezykiS/Inter/gui/images/uarrow.gif",
-                 self.file_change_order())
+                ("/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/lab10JezykiS/Inter/gui/images/change.png",
+                 self.change_order),
+                ("/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/lab10JezykiS/Inter/gui/images/trash.png",
+                 self.move_to_trash),
+                ("/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/lab10JezykiS/Inter/gui/images/date.png",
+                 self.to_date),
+                ("/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/lab10JezykiS/Inter/gui/images/"
+                 "dictionary.png", self.dictionaries)
+
         ):
             image = os.path.join(os.path.dirname(__file__), image)
             try:
@@ -90,20 +112,20 @@ class Muster_Obraz(BazoweGui):
         test = self.snap_no - 1
         if not self.set_snap_no(test):
             return
-        self.dispay_snap()
+        self.display_snap()
         pass
 
     def to_right(self):
         test = self.snap_no + 1
         if not self.set_snap_no(test):
             return
-        self.dispay_snap()
+        self.display_snap()
         pass
 
     def to_top(self):
         if not self.set_snap_no(0):
             return
-        self.dispay_snap()
+        self.display_snap()
         pass
 
     def set_snap_no(self, wanted):
@@ -120,7 +142,7 @@ class Muster_Obraz(BazoweGui):
             self.snap_no = 0
         return True
 
-    def dispay_snap(self):
+    def display_snap(self):
         file_name = self.to_display[self.snap_no]
         try:
             self.do_pokazania = Exif_dane(file_name)
@@ -245,9 +267,27 @@ class Muster_Obraz(BazoweGui):
         self.to_display = self.to_check
         pass
 
-    def file_change_order(self, event=None):
-        event = event
+    # ================= proby wlasne =====================
 
+    def change_order(self):
+        new_photo_order = []
+        length = len(self.to_display)
+
+        for item in self.to_display:
+           new_photo_order.insert(random.randint(0, length), item)
+
+        self.to_display = new_photo_order
+        self.set_snap_no(0)
+        self.display_snap()
+        pass
+
+    def to_date(self):
+        pass
+
+    def dictionaries(self):
+        pass
+
+    def move_to_trash(self):
         pass
 
 
