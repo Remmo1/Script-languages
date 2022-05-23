@@ -9,24 +9,66 @@ from PIL import Image, ImageTk
 from PIL.ExifTags import TAGS, GPSTAGS
 
 
-class Exif_dane():
-    def __init__(self, nazwa_pliku):
+def exist(nazwa_pliku, magazin_addresses):
+    if os.path.exists(nazwa_pliku):
+        return True, ""
+    for adres in magazin_addresses:
+        if os.path.exists(adres + nazwa_pliku):
+            return True, adres
+    return False, ""
+
+
+def convert_to_degress(value):
+    d0 = value[0][0]
+    d1 = value[0][1]
+    d = float(d0) / float(d1)
+    m0 = value[1][0]
+    m1 = value[1][1]
+    m = float(m0) / float(m1)
+    s0 = value[2][0]
+    s1 = value[2][1]
+    s = float(s0) / float(s1)
+    return d + (m / 60.0) + (s / 3600.0)
+
+
+def __get_distance_from_to(start, dest):
+    mlat, mlng = start
+    olat, olng = dest
+    if not mlat or not olat:
+        return -1
+    radius = 6371 * 1000
+    dLat = (olat - mlat) * pi / 180
+    dLng = (olng - mlng) * pi / 180
+    mlat = mlat * pi / 180
+    olat = olat * pi / 180
+    val = sin(dLat / 2) * sin(dLat / 2) + sin(dLng / 2) * sin(dLng / 2) * cos(mlat) * cos(olat)
+    ang = 2 * atan2(sqrt(val), sqrt(1 - val))
+    in_meters = radius * ang
+    return round(in_meters / 1000.0, 3)
+
+
+class Exif_dane:
+    def __init__(self, nazwa_pliku, magazin_addresses=None):
+        self.exif_data = None
+        if magazin_addresses is None:
+            magazin_addresses = []
         self.__nazwa_pliku = nazwa_pliku
-        if not os.path.exists(nazwa_pliku):
+
+        adres = exist(nazwa_pliku, magazin_addresses)
+        if not adres[0]:
             raise BaseException("Brak pliku:\t{0}".format(nazwa_pliku))
-        self.__plik_rozmiar = os.path.getsize(nazwa_pliku)
+        self.__plik_rozmiar = os.path.getsize(adres[1] + nazwa_pliku)
         try:
-            self.__zdjecie_samo = Image.open(nazwa_pliku)
+            self.__zdjecie_samo = Image.open(adres[1] + nazwa_pliku)
             self.__exif_data = self.get_exif_data()
         except:
-            raise BaseException("Zly format pliku:\t{0}".format(nazwa_pliku))
+            raise BaseException("Zly format pliku:\t{0}".format(adres[1] + nazwa_pliku))
         self.__czas = self.__daj_czas_wykonania()
         self.__test_image = ImageTk.PhotoImage(self.__zdjecie_samo)
         self.__lat_lng = self.get_lat_lng()
         self.__rozmiar = self.__zdjecie_samo.size
         self.__lokal = self.daj_lokal()
         self.__home_location = (51.10854, 17.06255)  # PWR
-        pass
 
     def daj_photoImage(self):
         return self.__test_image
@@ -85,7 +127,7 @@ class Exif_dane():
         zdjecie_h = self.__rozmiar[1]
         zdjecie_w = self.__rozmiar[0]
         okno_w = (zdjecie_w * okno_h) // zdjecie_h
-        return (okno_w, okno_h)
+        return okno_w, okno_h
 
     def __daj_czas_wykonania(self):
         structt = time.localtime(os.path.getmtime(self.__nazwa_pliku))
@@ -106,18 +148,6 @@ class Exif_dane():
             return data[key]
         return None
 
-    def convert_to_degress(self, value):
-        d0 = value[0][0]
-        d1 = value[0][1]
-        d = float(d0) / float(d1)
-        m0 = value[1][0]
-        m1 = value[1][1]
-        m = float(m0) / float(m1)
-        s0 = value[2][0]
-        s1 = value[2][1]
-        s = float(s0) / float(s1)
-        return d + (m / 60.0) + (s / 3600.0)
-
     def get_lat_lng(self):
         lat = None
         lng = None
@@ -129,10 +159,10 @@ class Exif_dane():
             gps_longitude = self.get_if_exist(gps_info, 'GPSLongitude')
             gps_longitude_ref = self.get_if_exist(gps_info, 'GPSLongitudeRef')
             if gps_latitude and gps_latitude_ref and gps_longitude and gps_longitude_ref:
-                lat = self.convert_to_degress(gps_latitude)
+                lat = convert_to_degress(gps_latitude)
                 if gps_latitude_ref != "N":
                     lat = 0 - lat
-                lng = self.convert_to_degress(gps_longitude)
+                lng = convert_to_degress(gps_longitude)
                 if gps_longitude_ref != "E":
                     lng = 0 - lng
         return lat, lng
@@ -158,33 +188,18 @@ class Exif_dane():
 
     def get_distance(self, inny_obraz):
         inny = Exif_dane(inny_obraz)
-        return self.__get_distance_from_to(self.__lat_lng, inny.get_lat_lng())
+        return Exif_dane.__get_distance_from_to(self.__lat_lng, inny.get_lat_lng())
 
     def get_distance_from_home(self):
         mlat, mlng = self.__lat_lng
         if not mlat:
             return -1
-        return self.__get_distance_from_to((mlat, mlng), (self.__home_location))
+        return Exif_dane.__get_distance_from_to((mlat, mlng), (self.__home_location))
         pass
-
-    def __get_distance_from_to(self, start, dest):
-        mlat, mlng = start
-        olat, olng = dest
-        if not mlat or not olat:
-            return -1
-        radius = 6371 * 1000
-        dLat = (olat - mlat) * pi / 180
-        dLng = (olng - mlng) * pi / 180
-        mlat = mlat * pi / 180
-        olat = olat * pi / 180
-        val = sin(dLat / 2) * sin(dLat / 2) + sin(dLng / 2) * sin(dLng / 2) * cos(mlat) * cos(olat)
-        ang = 2 * atan2(sqrt(val), sqrt(1 - val))
-        in_meters = radius * ang
-        return round(in_meters / 1000.0, 3)
 
     def __str__(self):
         x = self.get_lat_lng()
-        if (x == (None, None)):
+        if x == (None, None):
             loc = "no location given"
         else:
             m = self.get_distance_from_home()
@@ -197,7 +212,7 @@ class Exif_dane():
         # url https://www.google.com/maps?q=53.96277777777778,21.738611111111112
         decimal_latitude = self.get_lat_lng()[0]
         decimal_longitude = self.get_lat_lng()[1]
-        if decimal_latitude == None or decimal_longitude == None:
+        if decimal_latitude is None or decimal_longitude is None:
             return False
         url = f"https://www.google.com/maps?q={decimal_latitude},{decimal_longitude}"
         webbrowser.open_new_tab(url)
@@ -207,9 +222,7 @@ class Exif_dane():
 if __name__ == '__main__':
     root = tk.Tk()  # konieczne dla PhotoImage
 
-    metaData = Exif_dane('/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/lab10JezykiS/Inter/gui/images/Amazona_aestiva_-upper_body-8a_(1).jpg')  # Giżycko
-    print("Boczne-Giżycko", metaData.get_distance('e:/assets/5LOC.JPG'), metaData)  # Boczne
-    print("Gizycko Home", metaData.get_distance_from_home())
+    metaData = Exif_dane('e:/assets/3LOC.JPG')  # Giżycko
     metaData.drawMap()
 
     metaData = Exif_dane('e:/assets/1.JPG')

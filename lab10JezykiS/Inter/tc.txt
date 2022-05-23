@@ -1,10 +1,10 @@
 [DEFAULT]
 icons = /home/remmo/Downloads/Inter/gui/images
-bazowa_geometria = 1386x720+363+360
+bazowa_geometria = 1848x984+72+96
 
 [snaps]
 obraz_start = start.jpg
-ini_check_dir = /media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/lab10JezykiS/Inter/gui/images
+ini_check_dir = /media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/lab10JezykiS/Inter/gui/animals
 ini_save_dir = /home/remmo/Downloads/Inter/gui
 
 [selected_pictures]
