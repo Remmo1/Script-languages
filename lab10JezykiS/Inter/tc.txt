@@ -1,6 +1,6 @@
 [DEFAULT]
 icons = /home/remmo/Downloads/Inter/gui/images
-bazowa_geometria = 1386x720+326+321
+bazowa_geometria = 1848x984+72+96
 
 [snaps]
 obraz_start = start.jpg

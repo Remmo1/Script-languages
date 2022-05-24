@@ -3,7 +3,6 @@ Created on 2021-05-18
 
 @author: Andrzej
 """
-import random
 import tkinter as tk
 from tkinter import filedialog
 import os
@@ -271,12 +270,12 @@ class Muster_Obraz(BazoweGui):
 
     def change_order(self):
         new_photo_order = []
-        length = len(self.to_display)
 
         for item in self.to_display:
-           new_photo_order.insert(random.randint(0, length), item)
+            new_photo_order.insert(0, item)
 
         self.to_display = new_photo_order
+
         self.set_snap_no(0)
         self.display_snap()
         pass
@@ -288,6 +287,11 @@ class Muster_Obraz(BazoweGui):
         pass
 
     def move_to_trash(self):
+        elem = self.to_display[self.snap_no]
+        if self.to_show.__contains__(elem):
+            self.to_show.remove(elem)
+        if self.to_check.__contains__(elem):
+            self.to_check.remove(elem)
         pass
 
 
