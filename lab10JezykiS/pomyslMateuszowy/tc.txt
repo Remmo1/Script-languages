@@ -1,0 +1,14 @@
+[DEFAULT]
+icons = G:\Studia\JezykiSkryptowe\cos\Lab10\gui\images
+bazowa_geometria = 1920x997+-8+-8
+
+[snaps]
+obraz_start = start.jpg
+ini_check_dir = G:\Studia\JezykiSkryptowe\cos\Lab10\gui\images
+ini_save_dir = G:\Studia\JezykiSkryptowe\cos\Lab10\photo
+
+[selected_pictures]
+
+[pictures_2_view]
+e = G:\Studia\JezykiSkryptowe\cos\Lab10\gui\images\start.jpg
+
