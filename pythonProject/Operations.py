@@ -11,7 +11,8 @@ from constst import DEFAULT_FOLDER, PHOTO_FOLDER, BINARY_FOLDER, OTHERS_FOLDER, 
 # spis plikow
 def show_in_folder(folder):
     for file in os.scandir(folder):
-        print(file.path)
+        tokens = str(file.path).split('/')
+        print(tokens[len(tokens) - 1])
     print('\n')
 
 
@@ -115,11 +116,15 @@ def check_in_folder(folder):
         taken_files = sorted(taken_files, key=cmp_to_key(comparator))
         i = len(taken_files)
 
+        print('Status plikow w folderze %s' % folder)
+        for f in taken_files:
+            print(f)
+
         while i > MAXIMUM_AMOUNT_OF_FILES:
             move_file_to(taken_files[i - 1][1], ARCHIVE_FOLDER)
             i = i - 1
     else:
-        print('Brak plikow do archiwizacji / usuniecia')
+        print('Brak plikow do archiwizacji / usuniecia w folderze %s' % folder)
 
 
 def send_to_archive():
