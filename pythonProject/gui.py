@@ -1,160 +1,18 @@
-from random import choice
 import tkinter as tk
-from tkinter import Tk, Label, Button
+from tkinter import Tk
 
+import Operations
 from Downlader import download_photo, download_binary
+from Operations import compress_all
 
-"""
-# tkinter podstawy
-
-
-def click_action(button):
-    button.config(text=f'Wow!')
-
-
-def create_command(func, *args, **kwargs):
-    def command():
-        return func(*args, **kwargs)
-
-    return command()
-
-
-clicks = 0
-
-
-def increase_clicks(button):
-    global clicks
-    clicks += 1
-    button.config(text="Wow! x %s" % clicks)
-
-
-if __name__ == '__main__':
-
-    root = Tk()
-    root.title('App')
-    root.geometry('600x400')
-
-    label = Label(root, text='Look at me!', font=30, fg='blue')
-    label.pack()
-
-    # click_button = Button(root, text='click me!', width=8, command=click_action)
-    # lub
-    click_button = Button(root, text='click me!', width=8)
-    # click_button.config(command=click_action)
-
-    click_button.pack()
-
-    # click_button.config(command=create_command(click_action, click_button))
-    # lub
-    click_button.config(command=lambda: increase_clicks(click_button))
-
-    root.mainloop()
-
- 
-
-
-# tkinter marynarzyk
-
-avaliable_choices = ['p', 'k', 'n']
-cpu = choice(avaliable_choices)
-
-
-def play(player, cpu):
-    win_with = {'p': 'k', 'k': 'n', 'n': 'p'}
-    if player == cpu:
-        return None
-    elif win_with[player] == cpu:
-        return True
-    else:
-        return False
-
-
-def play_cmd(player):
-    global text_label
-    cpu = choice(avaliable_choices)
-    is_user_winner = play(player, cpu)
-    if is_user_winner is None:
-        text_label.config(text='Remis', fg='blue')
-    elif is_user_winner:
-        text_label.config(text='To bylo zwyciestwo absolutne', fg='green')
-    else:
-        text_label.config(text='gg ez noob', fg='red')
-
-
-if __name__ == '__main__':
-    root = Tk()
-    root.title('Marynarzyk')
-    root.geometry('300x150')
-
-    text_label = Label(root, font=40, text='Zagrajmy w marynarza!')
-    text_label.pack()
-
-    Button(
-        root, text='Papier', font=40, width=10,
-        command=lambda: play_cmd('p')
-    ).pack()
-    Button(
-        root, text='Kamien', font=40, width=10,
-        command=lambda: play_cmd('k')
-    ).pack()
-    Button(
-        root, text='Nozyce', font=40, width=10,
-        command=lambda: play_cmd('n')
-    ).pack()
-
-    root.mainloop()
-
-"""
-
-# tkinter z real python
-
-"""
-
-def some_f(entry):
-    sth = entry.get()
-    print(sth)
-
-
-if __name__ == '__main__':
-    root = Tk()
-    root.geometry('600x400')
-
-    label = tk.Label(
-        text="Hello, Tkinter",
-        fg="white",  # Set the text color to white
-        bg="black",  # Set the background color to black
-        width=10,
-        height=10
-    )
-
-    entry = tk.Entry(fg="yellow", bg="blue", width=50)
-
-    button = tk.Button(
-        text="Click me!",
-        width=25,
-        height=5,
-        bg="blue",
-        fg="yellow",
-        command=lambda: some_f(entry)
-    )
-
-    label.pack()
-    button.pack()
-    entry.pack()
-
-    root.mainloop()
-
-
-"""
-
-# glowne okno
+# główne okno
 root = Tk()
 
 
-# okienka pomocnicze wyswietlajace ostrzezenia i potwierdzenia
+# okienka pomocnicze wyświetlające ostrzeżenia i potwierdzenia
 def show_warning(msg, window):
     wr_win = tk.Toplevel(window)
-    wr_win.title('Blad')
+    wr_win.title('Błąd')
     wr_win.geometry('450x80')
 
     ret_m = tk.Label(
@@ -169,7 +27,7 @@ def show_warning(msg, window):
 
 def show_akn(msg, window):
     ak_win = tk.Toplevel(window)
-    ak_win.title('Ukonczono!')
+    ak_win.title('Ukończono!')
     ak_win.geometry('450x80')
 
     ret_m = tk.Label(
@@ -185,21 +43,21 @@ def show_akn(msg, window):
 # sekcja pobierania plikow
 def downloading(name, choice_d, d_win):
     if name == '':
-        show_warning('Wpisz w szarym polu jak chcesz nazwac plik!!!', d_win)
+        show_warning('Wpisz w szarym polu jak chcesz nazwać plik!!!', d_win)
     elif choice_d == 0:
-        show_warning('Wybierz jaki to ma byc plik, tzn. zaznacz zdjecie lub plik bin!', d_win)
+        show_warning('Wybierz jaki to ma być plik, tzn. zaznacz zdjęcie lub plik bin!', d_win)
     else:
         if choice_d == 1:
             download_photo(name + '.jpg')
-            show_akn('Zdjecie pobrano pomyslnie, znajdziesz je w folderze Pobrane', d_win)
+            show_akn('Zdjęcie pobrano pomyślnie, znajdziesz je w folderze Pobrane', d_win)
         elif choice_d == 2:
             download_binary(name + '.bin')
-            show_akn('Plik bin pobrano pomyslnie, znajdziesz go w folderze Pobrane', d_win)
+            show_akn('Plik bin pobrano pomyślnie, znajdziesz go w folderze Pobrane', d_win)
 
 
 def open_download_choice():
     download_window = tk.Toplevel(root)
-    download_window.title('Pobieranie losowych plikow')
+    download_window.title('Pobieranie losowych plików')
     download_window.geometry('500x500')
 
     choose_file_extension = tk.Label(
@@ -213,7 +71,7 @@ def open_download_choice():
     choose_file_extension.pack()
 
     var = tk.IntVar()
-    R1 = tk.Radiobutton(download_window, text="Zdjecie", variable=var, value=1)
+    R1 = tk.Radiobutton(download_window, text="Zdjęcie", variable=var, value=1)
     R1.pack()
 
     R2 = tk.Radiobutton(download_window, text="Plik bin", variable=var, value=2)
@@ -221,7 +79,7 @@ def open_download_choice():
 
     enter_file_name = tk.Label(
         download_window,
-        text="Podaj nazwe pliku:",
+        text="Podaj nazwę pliku:",
         width=40,
         height=3
     )
@@ -242,47 +100,109 @@ def open_download_choice():
     lets_download.pack()
 
 
-# sekcja porzadkowania
-def open_cleaner():
-    cleaner_win = tk.Toplevel(root)
-    cleaner_win.title('Sprzatacz')
-    cleaner_win.geometry('700x500')
+# sekcja przenoszenia
+def move_files_from_default(win):
+    Operations.take_from_default()
+    show_akn('Pliki zostały przeniesione do odpowiednich folderów.', win)
 
-    text_box = tk.Text(cleaner_win)
-    text_box.insert('1.0', 'Uwaga!')
-    text_box.insert('2.0', 'Wcisniecie tego przycisku oznacza przeniesienie wszystkich plikow')
-    text_box.insert('3.0', 'z folderu Pobrane, do projektu i posegregowanie ich wedlug rozszerzen.')
-    text_box.insert('4.0', 'Ponadto w przypadku przekroczenia limitu plikow najstarsze z nich zostana')
-    text_box.insert('5.0', 'zarchiwizowane.')
-    text_box.pack()
 
+def open_mover():
+    mover_win = tk.Toplevel(root)
+    mover_win.title('Przenoszenie')
+    mover_win.geometry('900x300')
+
+    mover_info = tk.Label(
+        master=mover_win,
+        text="Uwaga! Wszystkie pliki z folderu Pobrane zostaną przeniesione do projektu i posegregowane "
+             "według rozszerzeń, kontynuuować?",
+        fg="white",
+        bg="black",
+        width=800,
+        height=10
+    )
+    mover_info.pack()
+
+    mover_ok_bt = tk.Button(
+        master=mover_win,
+        text="Tak, przenieś pliki!",
+        width=800,
+        height=10,
+        bg="green",
+        fg="white",
+        command=lambda: move_files_from_default(mover_win)
+    )
+    mover_ok_bt.pack()
+
+
+# sekcja kompresji
+def compressing(win):
+    compress_all()
+    show_akn('Pliki zostały pomyślnie skopresowane.', win)
+
+
+def open_compresser():
+    compresser_win = tk.Toplevel(root)
+    compresser_win.title('Kompresja')
+    compresser_win.geometry('900x300')
+
+    compresser_info = tk.Label(
+        master=compresser_win,
+        text="Uwaga! Wszystkie pliki w projekcie o rozmiarze powyżej 3MB zostaną skompresowane, kontynuuować?",
+        fg="white",
+        bg="black",
+        width=800,
+        height=10
+    )
+    compresser_info.pack()
+
+    compresser_ok_bt = tk.Button(
+        master=compresser_win,
+        text="Tak, skompresuj pliki!",
+        width=800,
+        height=10,
+        bg="green",
+        fg="white",
+        command=lambda: compressing(compresser_win)
+    )
+    compresser_ok_bt.pack()
 
 
 # ============================================= main ======================================
+
 if __name__ == '__main__':
-    root.title('System zarzadzania plikami')
+    root.title('System zarządzania plikami')
     root.geometry("800x800")
     root.config(width=1000)
 
     download_button = tk.Button(
         text="Pobierz plik",
-        width=800,
-        height=10,
+        width=80,
+        height=5,
         bg="blue",
         fg="yellow",
         command=open_download_choice
     )
     download_button.pack()
 
-    cleaner_button = tk.Button(
-        text="Zrob porzadek",
-        width=800,
-        height=10,
+    mover_button = tk.Button(
+        text="Automatyczne Przenoszenie",
+        width=80,
+        height=5,
         bg="orange",
-        fg="yellow",
-        command=open_cleaner
+        fg="black",
+        command=open_mover
     )
-    cleaner_button.pack()
+    mover_button.pack()
+
+    compress_button = tk.Button(
+        text="Automatyczna kompresja",
+        width=80,
+        height=5,
+        bg="grey",
+        fg="white",
+        command=open_compresser
+    )
+    compress_button.pack()
 
     raports_label = tk.Label(
         text="Generuj raport:",
@@ -298,7 +218,7 @@ if __name__ == '__main__':
 
     r1 = tk.Button(
         master=raports_choice,
-        text='Ogolny',
+        text='Ogólny',
         width=25,
         height=5,
         bg="yellow",
@@ -307,14 +227,14 @@ if __name__ == '__main__':
 
     r2 = tk.Button(
         master=raports_choice,
-        text='Ilosc plikow',
+        text='Ilość plików',
         width=25,
         height=5,
         bg="green",
         fg="blue",
     )
 
-    r1.pack()
-    r2.pack()
+    r1.pack(padx=5, pady=10, side=tk.LEFT)
+    r2.pack(padx=5, pady=10, side=tk.LEFT)
 
     root.mainloop()

@@ -9,3 +9,4 @@ OTHERS_FOLDER = '/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/pytho
 ARCHIVE_FOLDER = '/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/pythonProject/archive'
 
 MAXIMUM_AMOUNT_OF_FILES = 4
+MAXIMUM_FILE_SIZE = 3000000

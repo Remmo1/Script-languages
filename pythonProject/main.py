@@ -1,4 +1,4 @@
-from Operations import take_from_default, compress_file, decompress_file, show_all_files, send_to_archive
+from Operations import take_from_default, compress_file, show_all_files, send_to_archive
 from Downlader import download_photo, download_binary
 
 
@@ -41,10 +41,6 @@ def automatic_moving():
 
 def compressing(name):
     compress_file(name)
-
-
-def decompressing(name):
-    decompress_file(name)
 
 
 def archiving():

@@ -1,11 +1,13 @@
-import shutil
-import os
-import sys
-import zlib
+import bz2
 import datetime
+import os
+import shutil
+import sys
+import zipfile
 from functools import cmp_to_key
 
-from constst import DEFAULT_FOLDER, PHOTO_FOLDER, BINARY_FOLDER, OTHERS_FOLDER, MAXIMUM_AMOUNT_OF_FILES, ARCHIVE_FOLDER
+from constst import DEFAULT_FOLDER, PHOTO_FOLDER, BINARY_FOLDER, OTHERS_FOLDER, MAXIMUM_AMOUNT_OF_FILES, \
+    ARCHIVE_FOLDER, MAXIMUM_FILE_SIZE
 
 
 # spis plikow
@@ -67,25 +69,59 @@ def take_from_default():
 # kompresja plikow
 
 def compress_file(file_path):
-    with open(file_path, mode='rb') as fin, open(file_path, mode='wb') as fout:
+
+    # bierzemy nazwę pliku
+    f_n = file_path.split('/')
+    f_n = f_n[len(f_n) - 1]
+    old_f_n = f_n
+
+    # ucinamy rozszerzenie
+    act = len(f_n) - 1
+    c = f_n[act]
+    while c != '.':
+        act = act - 1
+        c = f_n[act]
+        f_n = f_n[0:act]
+
+    # tworzymy nowy plik
+    f_n = f_n + '-compressed.bz2'
+    new_f_n = str(file_path).replace(old_f_n, f_n)
+
+    if os.path.exists(new_f_n):
+        print(f'\tPlik {old_f_n} już został skompresowany! Nazywa się teraz {f_n}')
+        return
+
+    with open(file_path, mode="rb") as fin, bz2.open(new_f_n, "wb") as fout:
+        fout.write(fin.read())
+
+    file_s = file_path.split('/')
+    file_s = file_s[len(file_s) - 1]
+
+    print(f'\tPlik {file_s}:')
+    print(f'\tPrzed kompresją: {os.stat(file_path).st_size:,}')
+    print(f'\tPo kompresji: {os.stat(new_f_n).st_size:,}')
+
+
+def decompress_file(file_path):
+    with bz2.open(file_path, "rb") as fin:
         data = fin.read()
-        compressed = zlib.compress(data, zlib.Z_BEST_COMPRESSION)
-        print('Original size: %s' % sys.getsizeof(data))
-        print('Copressed size: %s' % sys.getsizeof(compressed))
-
-        fout.write(compressed)
+        print(f"Plik po dekompresji: {sys.getsizeof(data)}")
 
 
-# dekompresja plikow
+def compress_all_files(folder):
+    act_f = folder.split('/')
+    act_f = act_f[len(act_f) - 1]
+    print(f'Folder {act_f}')
+    for filename in os.scandir(folder):
+        act_f_s = os.path.getsize(filename.path)
+        if act_f_s > MAXIMUM_FILE_SIZE:
+            compress_file(filename.path)
 
-def decompress_file(filename):
-    with open(filename, mode="rb") as fin, open(filename, mode='wb') as fout:
-        data = fin.read()
-        compressed_data = zlib.decompress(data)
-        print(f"Compressed size: {sys.getsizeof(data)}")
-        print(f"Decompressed size: {sys.getsizeof(compressed_data)}")
 
-        fout.write(compressed_data)
+def compress_all():
+    compress_all_files(BINARY_FOLDER)
+    compress_all_files(PHOTO_FOLDER)
+    compress_all_files(OTHERS_FOLDER)
 
 
 # archiwizowanie plikow
@@ -132,3 +168,11 @@ def send_to_archive():
     check_in_folder(BINARY_FOLDER)
     check_in_folder(PHOTO_FOLDER)
     check_in_folder(OTHERS_FOLDER)
+
+
+# rozpakowanie folderu
+
+def unzip_folder(folder_name):
+    zf = zipfile.ZipFile(folder_name, 'r')
+    zf.extractall('/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/pythonProject/downloaded')
+    zf.close()
