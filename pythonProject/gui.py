@@ -3,7 +3,7 @@ from tkinter import Tk
 
 import Operations
 from Downlader import download_photo, download_binary
-from Operations import compress_all
+from Operations import compress_all, send_to_archive, show_all_files, show_amount_of_files
 
 # główne okno
 root = Tk()
@@ -167,12 +167,46 @@ def open_compresser():
     compresser_ok_bt.pack()
 
 
+# sekcja archiwizacji
+def archiving(win):
+    send_to_archive()
+    show_akn('Pliki zostały pomyślnie przeniesione do archiwum.', win)
+
+
+def open_archivizer():
+    archiver_win = tk.Toplevel(root)
+    archiver_win.title('Archiwizacja')
+    archiver_win.geometry('900x300')
+
+    archiver_info = tk.Label(
+        master=archiver_win,
+        text="Uwaga! Najstarsze pliki zostaną przeniesione do archiwum, kontynuuować?",
+        fg="white",
+        bg="black",
+        width=800,
+        height=10
+    )
+    archiver_info.pack()
+
+    archiver_ok_bt = tk.Button(
+        master=archiver_win,
+        text="Tak, archiwizuj pliki!",
+        width=800,
+        height=10,
+        bg="green",
+        fg="white",
+        command=lambda: archiving(archiver_win)
+    )
+    archiver_ok_bt.pack()
+
+
 # ============================================= main ======================================
 
 if __name__ == '__main__':
     root.title('System zarządzania plikami')
     root.geometry("800x800")
     root.config(width=1000)
+    root.eval('tk::PlaceWindow . center')
 
     download_button = tk.Button(
         text="Pobierz plik",
@@ -204,6 +238,16 @@ if __name__ == '__main__':
     )
     compress_button.pack()
 
+    archive_button = tk.Button(
+        text="Automatyczna archiwizacja",
+        width=80,
+        height=5,
+        bg="green",
+        fg="white",
+        command=open_archivizer
+    )
+    archive_button.pack()
+
     raports_label = tk.Label(
         text="Generuj raport:",
         fg="white",
@@ -223,6 +267,7 @@ if __name__ == '__main__':
         height=5,
         bg="yellow",
         fg="blue",
+        command=show_all_files
     )
 
     r2 = tk.Button(
@@ -232,6 +277,7 @@ if __name__ == '__main__':
         height=5,
         bg="green",
         fg="blue",
+        command=show_amount_of_files
     )
 
     r1.pack(padx=5, pady=10, side=tk.LEFT)

@@ -11,6 +11,7 @@ from constst import DEFAULT_FOLDER, PHOTO_FOLDER, BINARY_FOLDER, OTHERS_FOLDER, 
 
 
 # spis plikow
+
 def show_in_folder(folder):
     for file in os.scandir(folder):
         tokens = str(file.path).split('/')
@@ -19,6 +20,7 @@ def show_in_folder(folder):
 
 
 def show_all_files():
+    print('\n ====== Spis plików ========\n')
     print('Pliki z archiwum:')
     show_in_folder(ARCHIVE_FOLDER)
 
@@ -33,6 +35,16 @@ def show_all_files():
 
     print('Inne')
     show_in_folder(OTHERS_FOLDER)
+
+
+# ilość plików w folderach
+
+def show_amount_of_files():
+    print(f'Liczba plików w archiwum:\t\t\t {amount_of_files_in(ARCHIVE_FOLDER)}')
+    print(f'Liczba plików w folderze pobrane:\t {amount_of_files_in(DEFAULT_FOLDER)}')
+    print(f'Liczba plików w folderze binaries:\t {amount_of_files_in(BINARY_FOLDER)}')
+    print(f'Liczba plików w folderze zdjęć:\t\t {amount_of_files_in(PHOTO_FOLDER)}')
+    print(f'Liczba plików w folderze inne:\t\t {amount_of_files_in(OTHERS_FOLDER)}')
 
 
 # Przerzucanie plikow miedzy folderami
@@ -141,6 +153,9 @@ def comparator(a, b):
 
 
 def check_in_folder(folder):
+    folder_name = folder.split('/')
+    folder_name = folder_name[len(folder_name) - 1]
+
     if amount_of_files_in(folder) > MAXIMUM_AMOUNT_OF_FILES:
         taken_files = []
         today = datetime.datetime.today()
@@ -152,19 +167,20 @@ def check_in_folder(folder):
         taken_files = sorted(taken_files, key=cmp_to_key(comparator))
         i = len(taken_files)
 
-        print('Status plikow w folderze %s' % folder)
+        print('Status plikow w folderze %s' % folder_name)
         for f in taken_files:
-            print(f)
+            f_n = f[1].split('/')
+            f_n = f_n[len(f_n) - 1]
+            print(f'Czas życia pliku {f_n}: {f[0].seconds} [s] i {f[0].microseconds} [ms]')
 
         while i > MAXIMUM_AMOUNT_OF_FILES:
             move_file_to(taken_files[i - 1][1], ARCHIVE_FOLDER)
             i = i - 1
     else:
-        print('Brak plikow do archiwizacji / usuniecia w folderze %s' % folder)
+        print('Brak plikow do archiwizacji / usuniecia w folderze %s' % folder_name)
 
 
 def send_to_archive():
-    take_from_default()
     check_in_folder(BINARY_FOLDER)
     check_in_folder(PHOTO_FOLDER)
     check_in_folder(OTHERS_FOLDER)
