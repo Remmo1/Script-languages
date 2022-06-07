@@ -10,7 +10,7 @@ from constst import DEFAULT_FOLDER, PHOTO_FOLDER, BINARY_FOLDER, OTHERS_FOLDER, 
     ARCHIVE_FOLDER, MAXIMUM_FILE_SIZE
 
 
-# spis plikow
+# spis plików
 
 def show_in_folder(folder):
     for file in os.scandir(folder):
@@ -47,7 +47,7 @@ def show_amount_of_files():
     print(f'Liczba plików w folderze inne:\t\t {amount_of_files_in(OTHERS_FOLDER)}')
 
 
-# Przerzucanie plikow miedzy folderami
+# Przerzucanie plików między folderami
 
 def move_file_to(file_path, target_directory):
     try:
@@ -66,7 +66,7 @@ def move_binary_file(file_path):
     move_file_to(file_path, BINARY_FOLDER)
 
 
-# metoda bioraca pliki z folderu domyslnego i wrzucajaca je do projektu
+# metoda biorąca pliki z folderu domyślnego i wrzucająca je do projektu
 
 def take_from_default():
     for filename in os.scandir(DEFAULT_FOLDER):
@@ -78,7 +78,7 @@ def take_from_default():
             move_file_to(filename.path, OTHERS_FOLDER)
 
 
-# kompresja plikow
+# kompresja plików
 
 def compress_file(file_path):
 
@@ -136,7 +136,7 @@ def compress_all():
     compress_all_files(OTHERS_FOLDER)
 
 
-# archiwizowanie plikow
+# archiwizowanie plików
 
 def amount_of_files_in(folder):
     i = 0

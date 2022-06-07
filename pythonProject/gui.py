@@ -232,8 +232,8 @@ if __name__ == '__main__':
         text="Automatyczna kompresja",
         width=80,
         height=5,
-        bg="grey",
-        fg="white",
+        bg="cyan",
+        fg="black",
         command=open_compresser
     )
     compress_button.pack()
@@ -247,6 +247,15 @@ if __name__ == '__main__':
         command=open_archivizer
     )
     archive_button.pack()
+
+    delete_button = tk.Button(
+        text="Automatyczne usuwanie",
+        width=80,
+        height=5,
+        bg="purple",
+        fg="white"
+    )
+    delete_button.pack()
 
     raports_label = tk.Label(
         text="Generuj raport:",
@@ -276,7 +285,7 @@ if __name__ == '__main__':
         width=25,
         height=5,
         bg="green",
-        fg="blue",
+        fg="white",
         command=show_amount_of_files
     )
 
