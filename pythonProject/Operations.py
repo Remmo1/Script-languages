@@ -192,3 +192,51 @@ def unzip_folder(folder_name):
     zf = zipfile.ZipFile(folder_name, 'r')
     zf.extractall('/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/pythonProject/downloaded')
     zf.close()
+
+
+# usuwanie z folderu
+
+def delete_all(folder):
+    for file in os.scandir(folder):
+        os.remove(file)
+
+
+# funkcje użytkownika
+
+def return_file_name(path: str) -> str:
+    f_n = path.split('/')
+    return f_n[len(f_n) - 1]
+
+
+def search_for_folders(folder):
+    folders_rules = {}
+    folders_ext = {}
+
+    for f in os.scandir(folder):
+        if os.path.isdir(f):
+            for fi in os.scandir(f):
+                f_n = return_file_name(fi.path)
+                if os.path.isfile(fi) and (f_n == '__ex_r__info.abc'):
+                    ex_r_file = open(fi)
+                    data = ex_r_file.read()
+                    if data[0] == '.':
+                        folders_ext[data] = f.path
+                    else:
+                        folders_rules[data] = f.path
+                    ex_r_file.close()
+                    break
+
+    return folders_ext, folders_rules
+
+
+def take_from_default_n(folders):
+    for filename in os.scandir(DEFAULT_FOLDER):
+        moved = False
+        for ext in folders[0]:
+            if str(filename.path).endswith(ext):
+                move_file_to(filename.path, folders[0][ext])
+                moved = True
+                break
+        if not moved:
+            move_file_to(filename.path, folders[1]['others'])
+

@@ -7,6 +7,7 @@ BINARY_FOLDER = '/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/pytho
 PHOTO_FOLDER = '/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/pythonProject/photos'
 OTHERS_FOLDER = '/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/pythonProject/others'
 ARCHIVE_FOLDER = '/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/pythonProject/archive'
+PROJECT_FOLDER  ='/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/pythonProject'
 
 MAXIMUM_AMOUNT_OF_FILES = 4
 MAXIMUM_FILE_SIZE = 3000000

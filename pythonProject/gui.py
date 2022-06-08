@@ -1,9 +1,10 @@
 import tkinter as tk
 from tkinter import Tk
 
-import Operations
+import constst
 from Downlader import download_photo, download_binary
-from Operations import compress_all, send_to_archive, show_all_files, show_amount_of_files
+from Operations import compress_all, send_to_archive, show_all_files, show_amount_of_files, delete_all, \
+    take_from_default_n, search_for_folders
 
 # główne okno
 root = Tk()
@@ -101,12 +102,12 @@ def open_download_choice():
 
 
 # sekcja przenoszenia
-def move_files_from_default(win):
-    Operations.take_from_default()
+def move_files_from_default(win, folders):
+    take_from_default_n(folders)
     show_akn('Pliki zostały przeniesione do odpowiednich folderów.', win)
 
 
-def open_mover():
+def open_mover(folders):
     mover_win = tk.Toplevel(root)
     mover_win.title('Przenoszenie')
     mover_win.geometry('900x300')
@@ -129,7 +130,7 @@ def open_mover():
         height=10,
         bg="green",
         fg="white",
-        command=lambda: move_files_from_default(mover_win)
+        command=lambda: move_files_from_default(mover_win, folders)
     )
     mover_ok_bt.pack()
 
@@ -200,13 +201,51 @@ def open_archivizer():
     archiver_ok_bt.pack()
 
 
+# sekcja usuwania
+
+def deleting(win):
+    delete_all(constst.ARCHIVE_FOLDER)
+    show_akn('Pliki z archiwum zostały trwale usunięte', win)
+
+
+def open_deleter():
+    deleter_win = tk.Toplevel(root)
+    deleter_win.title('Usuwanie')
+    deleter_win.geometry('900x300')
+
+    deleter_info = tk.Label(
+        master=deleter_win,
+        text="Uwaga! Wszystkie pliki z archiwum zostaną trwale usunięte, kontynuuować?",
+        fg="white",
+        bg="black",
+        width=800,
+        height=10
+    )
+    deleter_info.pack()
+
+    deleter_ok_bt = tk.Button(
+        master=deleter_win,
+        text="Tak, usuń pliki!",
+        width=800,
+        height=10,
+        bg="red",
+        fg="white",
+        command=lambda: deleting(deleter_win)
+    )
+    deleter_ok_bt.pack()
+
+
+# sekcja własnych funkcji
+
 # ============================================= main ======================================
 
 if __name__ == '__main__':
     root.title('System zarządzania plikami')
-    root.geometry("800x800")
+    root.geometry("900x900")
     root.config(width=1000)
+    root.config(height=1000)
     root.eval('tk::PlaceWindow . center')
+    FOLDERS = search_for_folders(constst.PROJECT_FOLDER)
 
     download_button = tk.Button(
         text="Pobierz plik",
@@ -224,7 +263,7 @@ if __name__ == '__main__':
         height=5,
         bg="orange",
         fg="black",
-        command=open_mover
+        command=lambda: open_mover(FOLDERS)
     )
     mover_button.pack()
 
@@ -253,9 +292,19 @@ if __name__ == '__main__':
         width=80,
         height=5,
         bg="purple",
-        fg="white"
+        fg="white",
+        command=open_deleter
     )
     delete_button.pack()
+
+    user_function_button = tk.Button(
+        text="Stwórz własne funkcje",
+        width=80,
+        height=5,
+        bg="brown",
+        fg="black"
+    )
+    user_function_button.pack()
 
     raports_label = tk.Label(
         text="Generuj raport:",
