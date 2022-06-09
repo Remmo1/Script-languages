@@ -3,7 +3,7 @@ from tkinter import Tk
 
 import constst
 from Downlader import download_photo, download_binary
-from Operations import compress_all, send_to_archive, show_all_files, show_amount_of_files, delete_all, \
+from Operations import compress_all_n, send_to_archive_n, show_all_files, show_amount_of_files, delete_all, \
     take_from_default_n, search_for_folders
 
 # główne okno
@@ -136,12 +136,12 @@ def open_mover(folders):
 
 
 # sekcja kompresji
-def compressing(win):
-    compress_all()
+def compressing(win, folders):
+    compress_all_n(folders)
     show_akn('Pliki zostały pomyślnie skopresowane.', win)
 
 
-def open_compresser():
+def open_compresser(folders):
     compresser_win = tk.Toplevel(root)
     compresser_win.title('Kompresja')
     compresser_win.geometry('900x300')
@@ -163,18 +163,18 @@ def open_compresser():
         height=10,
         bg="green",
         fg="white",
-        command=lambda: compressing(compresser_win)
+        command=lambda: compressing(compresser_win, folders)
     )
     compresser_ok_bt.pack()
 
 
 # sekcja archiwizacji
-def archiving(win):
-    send_to_archive()
+def archiving(win, folders):
+    send_to_archive_n(folders)
     show_akn('Pliki zostały pomyślnie przeniesione do archiwum.', win)
 
 
-def open_archivizer():
+def open_archivizer(folders):
     archiver_win = tk.Toplevel(root)
     archiver_win.title('Archiwizacja')
     archiver_win.geometry('900x300')
@@ -196,7 +196,7 @@ def open_archivizer():
         height=10,
         bg="green",
         fg="white",
-        command=lambda: archiving(archiver_win)
+        command=lambda: archiving(archiver_win, folders)
     )
     archiver_ok_bt.pack()
 
@@ -273,7 +273,7 @@ if __name__ == '__main__':
         height=5,
         bg="cyan",
         fg="black",
-        command=open_compresser
+        command=lambda: open_compresser(FOLDERS)
     )
     compress_button.pack()
 
@@ -283,7 +283,7 @@ if __name__ == '__main__':
         height=5,
         bg="green",
         fg="white",
-        command=open_archivizer
+        command=lambda: open_archivizer(FOLDERS)
     )
     archive_button.pack()
 

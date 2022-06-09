@@ -198,7 +198,8 @@ def unzip_folder(folder_name):
 
 def delete_all(folder):
     for file in os.scandir(folder):
-        os.remove(file)
+        if not str(file.path).endswith('__ex_r__info.abc'):
+            os.remove(file)
 
 
 # funkcje użytkownika
@@ -240,3 +241,16 @@ def take_from_default_n(folders):
         if not moved:
             move_file_to(filename.path, folders[1]['others'])
 
+
+def compress_all_n(folders):
+    for ext_f in folders[0]:
+        compress_all_files(folders[0][ext_f])
+    for rule_f in folders[1]:
+        compress_all_files(folders[1][rule_f])
+
+
+def send_to_archive_n(folders):
+    for ext_f in folders[0]:
+        check_in_folder(folders[0][ext_f])
+    for rule_f in folders[1]:
+        check_in_folder(folders[1][rule_f])
