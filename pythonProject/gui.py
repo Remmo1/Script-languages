@@ -237,6 +237,66 @@ def open_deleter():
 
 # sekcja własnych funkcji
 
+def open_function_creator(folders):
+    function_win = tk.Toplevel(root)
+    function_win.title('Kreator funkcji')
+    function_win.geometry('600x400')
+
+    # część odpowiedzialna za rozszerzenia
+    fr1 = tk.Frame(function_win)
+    fr1.pack()
+
+    var = tk.IntVar()
+    R1 = tk.Radiobutton(fr1, text="Dodaj nowy folder na rozszerzenia", variable=var, value=1)
+    R1.pack()
+
+    fr2 = tk.Frame(function_win)
+    fr2.pack()
+
+    l1 = tk.Label(
+        fr2,
+        text="Podaj nazwę nowego folderu: ",
+        width=40,
+        height=3
+    )
+    l1.pack(side=tk.LEFT)
+
+    e1 = tk.Entry(fr2, fg="white", bg="white", width=20)
+    e1.pack(side=tk.LEFT)
+
+    fr3 = tk.Frame(function_win)
+    fr3.pack()
+
+    l2 = tk.Label(
+        fr3,
+        text="Podaj nazwę rozszerzenia: .",
+        width=40,
+        height=3
+    )
+    l2.pack(side=tk.LEFT)
+
+    e2 = tk.Entry(fr3, fg="white", bg="white", width=20)
+    e2.pack(side=tk.LEFT)
+
+    tk.Label(fr3, height=10, width=30).pack(side=tk.TOP)
+
+    # cześć odpowiedzialna za reguły
+    fr4 = tk.Frame(function_win)
+    fr4.pack()
+
+    R2 = tk.Radiobutton(fr4, text="Dodaj własną regułę", variable=var, value=2)
+    R2.pack()
+
+    l2 = tk.Label(
+        fr4,
+        text="Podaj nazwę :",
+        width=40,
+        height=3
+    )
+    l2.pack(side=tk.LEFT)
+
+
+
 # ============================================= main ======================================
 
 if __name__ == '__main__':
@@ -302,7 +362,8 @@ if __name__ == '__main__':
         width=80,
         height=5,
         bg="brown",
-        fg="black"
+        fg="black",
+        command=lambda: open_function_creator(FOLDERS)
     )
     user_function_button.pack()
 
