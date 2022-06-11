@@ -4,7 +4,7 @@ from tkinter import Tk
 import constst
 from Downlader import download_photo, download_binary
 from Operations import compress_all_n, send_to_archive_n, show_all_files, show_amount_of_files, delete_all, \
-    take_from_default_n, search_for_folders
+    take_from_default_n, search_for_folders, create_folder_for_extension
 
 # główne okno
 root = Tk()
@@ -39,6 +39,17 @@ def show_akn(msg, window):
         height=2
     )
     ret_m.pack()
+
+    des_bt = tk.Button(
+        ak_win,
+        text="OK!",
+        width=20,
+        height=5,
+        bg="green",
+        fg="black",
+        command=ak_win.destroy
+    )
+    des_bt.pack()
 
 
 # sekcja pobierania plikow
@@ -237,64 +248,62 @@ def open_deleter():
 
 # sekcja własnych funkcji
 
-def open_function_creator(folders):
+def open_functions_chooser(folders):
     function_win = tk.Toplevel(root)
     function_win.title('Kreator funkcji')
     function_win.geometry('600x400')
 
-    # część odpowiedzialna za rozszerzenia
-    fr1 = tk.Frame(function_win)
-    fr1.pack()
+    fr = tk.Frame(function_win)
+    fr.pack()
 
-    var = tk.IntVar()
-    R1 = tk.Radiobutton(fr1, text="Dodaj nowy folder na rozszerzenia", variable=var, value=1)
-    R1.pack()
+    bt1 = tk.Button(fr, text='Folder na rozszerzenia', width=20, height=20, bg='cyan', fg='black',
+                    command=lambda: open_ext_folder_creator(folders))
+    bt1.pack(side=tk.LEFT, padx=5, pady=20)
+    bt2 = tk.Button(fr, text='Folder na nazwy', width=20, height=20, bg='purple', fg='black',
+                    command=lambda: open_name_folder_creator(folders, function_win))
+    bt2.pack(side=tk.LEFT, padx=5, pady=20)
+    bt3 = tk.Button(fr, text='Własny pomysł', width=20, height=20, bg='yellow', fg='black',
+                    command=lambda: open_user_ideas_creator(folders, function_win))
+    bt3.pack(side=tk.LEFT, padx=5, pady=20)
 
-    fr2 = tk.Frame(function_win)
-    fr2.pack()
 
-    l1 = tk.Label(
-        fr2,
-        text="Podaj nazwę nowego folderu: ",
-        width=40,
-        height=3
-    )
-    l1.pack(side=tk.LEFT)
+def open_ext_folder_creator(folders):
+    ext_f_win = tk.Toplevel(root)
+    ext_f_win.title('Kreator folderu rozszerzeń')
+    ext_f_win.geometry('600x400')
 
-    e1 = tk.Entry(fr2, fg="white", bg="white", width=20)
-    e1.pack(side=tk.LEFT)
+    l1 = tk.Label(ext_f_win, text='Podaj nazwę folderu: ')
+    l1.pack(padx=5, pady=20)
+    e1 = tk.Entry(ext_f_win)
+    e1.pack(padx=5, pady=20)
 
-    fr3 = tk.Frame(function_win)
-    fr3.pack()
+    l2 = tk.Label(ext_f_win, text='Podaj nazwę rozszerzenia (nie musisz podawać kropki na początku):')
+    l2.pack(padx=5, pady=20)
+    e2 = tk.Entry(ext_f_win)
+    e2.pack(padx=5, pady=20)
 
-    l2 = tk.Label(
-        fr3,
-        text="Podaj nazwę rozszerzenia: .",
-        width=40,
-        height=3
-    )
-    l2.pack(side=tk.LEFT)
+    confirm_bt = tk.Button(ext_f_win, text='Tak, stwórz folder na podane rozszerzenia!',
+                           width=35, height=5, bg='green', fg='white',
+                           command=lambda: create_folder_for_ext(e1.get(), folders, e2.get(), ext_f_win))
+    confirm_bt.pack(padx=5, pady=20)
 
-    e2 = tk.Entry(fr3, fg="white", bg="white", width=20)
-    e2.pack(side=tk.LEFT)
 
-    tk.Label(fr3, height=10, width=30).pack(side=tk.TOP)
+def create_folder_for_ext(f_n, folders, ext, win):
+    if f_n == '':
+        show_warning('Podaj nazwę folderu!', win)
+    elif ext == '':
+        show_warning('Podaj nazwę rozszerzenia!', win)
+    else:
+        create_folder_for_extension(f_n, ext, folders)
+        show_akn('Folder o nazwie %s przechowujący rozszerzenia %s został utworzony!' % (f_n, ext), win)
 
-    # cześć odpowiedzialna za reguły
-    fr4 = tk.Frame(function_win)
-    fr4.pack()
 
-    R2 = tk.Radiobutton(fr4, text="Dodaj własną regułę", variable=var, value=2)
-    R2.pack()
+def open_name_folder_creator(folders, win):
+    pass
 
-    l2 = tk.Label(
-        fr4,
-        text="Podaj nazwę :",
-        width=40,
-        height=3
-    )
-    l2.pack(side=tk.LEFT)
 
+def open_user_ideas_creator(folders, win):
+    pass
 
 
 # ============================================= main ======================================
@@ -363,7 +372,7 @@ if __name__ == '__main__':
         height=5,
         bg="brown",
         fg="black",
-        command=lambda: open_function_creator(FOLDERS)
+        command=lambda: open_functions_chooser(FOLDERS)
     )
     user_function_button.pack()
 

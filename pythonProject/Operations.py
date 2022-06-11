@@ -7,7 +7,7 @@ import zipfile
 from functools import cmp_to_key
 
 from constst import DEFAULT_FOLDER, PHOTO_FOLDER, BINARY_FOLDER, OTHERS_FOLDER, MAXIMUM_AMOUNT_OF_FILES, \
-    ARCHIVE_FOLDER, MAXIMUM_FILE_SIZE
+    ARCHIVE_FOLDER, MAXIMUM_FILE_SIZE, PROJECT_FOLDER
 
 
 # spis plików
@@ -68,6 +68,7 @@ def move_binary_file(file_path):
 
 # metoda biorąca pliki z folderu domyślnego i wrzucająca je do projektu
 
+# wersja podstawowa
 def take_from_default():
     for filename in os.scandir(DEFAULT_FOLDER):
         if filename.is_file() and str(filename.path).endswith('.jpg'):
@@ -76,6 +77,19 @@ def take_from_default():
             move_binary_file(filename.path)
         else:
             move_file_to(filename.path, OTHERS_FOLDER)
+
+
+# wersja bardziej uniwersalna
+def take_from_default_n(folders):
+    for filename in os.scandir(DEFAULT_FOLDER):
+        moved = False
+        for ext in folders[0]:
+            if str(filename.path).endswith(ext):
+                move_file_to(filename.path, folders[0][ext])
+                moved = True
+                break
+        if not moved:
+            move_file_to(filename.path, folders[1]['others'])
 
 
 # kompresja plików
@@ -130,10 +144,11 @@ def compress_all_files(folder):
             compress_file(filename.path)
 
 
-def compress_all():
-    compress_all_files(BINARY_FOLDER)
-    compress_all_files(PHOTO_FOLDER)
-    compress_all_files(OTHERS_FOLDER)
+def compress_all_n(folders):
+    for ext_f in folders[0]:
+        compress_all_files(folders[0][ext_f])
+    for rule_f in folders[1]:
+        compress_all_files(folders[1][rule_f])
 
 
 # archiwizowanie plików
@@ -180,10 +195,11 @@ def check_in_folder(folder):
         print('Brak plikow do archiwizacji / usuniecia w folderze %s' % folder_name)
 
 
-def send_to_archive():
-    check_in_folder(BINARY_FOLDER)
-    check_in_folder(PHOTO_FOLDER)
-    check_in_folder(OTHERS_FOLDER)
+def send_to_archive_n(folders):
+    for ext_f in folders[0]:
+        check_in_folder(folders[0][ext_f])
+    for rule_f in folders[1]:
+        check_in_folder(folders[1][rule_f])
 
 
 # rozpakowanie folderu
@@ -230,27 +246,21 @@ def search_for_folders(folder):
     return folders_ext, folders_rules
 
 
-def take_from_default_n(folders):
-    for filename in os.scandir(DEFAULT_FOLDER):
-        moved = False
-        for ext in folders[0]:
-            if str(filename.path).endswith(ext):
-                move_file_to(filename.path, folders[0][ext])
-                moved = True
-                break
-        if not moved:
-            move_file_to(filename.path, folders[1]['others'])
+def create_folder_for_extension(f_name, ext, folders):
+    try:
+        f_path = PROJECT_FOLDER + '/' + f_name
+        os.mkdir(PROJECT_FOLDER + '/' + f_name)
+    except OSError:
+        pass
 
+    try:
+        f = open(PROJECT_FOLDER + '/' + f_name + '/__ex_r__info.abc', 'x')
+        if ext[0] != '.':
+            ext = '.' + ext
 
-def compress_all_n(folders):
-    for ext_f in folders[0]:
-        compress_all_files(folders[0][ext_f])
-    for rule_f in folders[1]:
-        compress_all_files(folders[1][rule_f])
+        f.write(ext)
 
+        folders[0][ext] = f_path
 
-def send_to_archive_n(folders):
-    for ext_f in folders[0]:
-        check_in_folder(folders[0][ext_f])
-    for rule_f in folders[1]:
-        check_in_folder(folders[1][rule_f])
+    except FileExistsError:
+        pass
