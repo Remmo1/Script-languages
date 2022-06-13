@@ -2,8 +2,10 @@ import bz2
 import datetime
 import os
 import shutil
+import smtplib
 import sys
 import zipfile
+from email.mime.text import MIMEText
 from functools import cmp_to_key
 
 from constst import DEFAULT_FOLDER, PHOTO_FOLDER, BINARY_FOLDER, OTHERS_FOLDER, MAXIMUM_AMOUNT_OF_FILES, \
@@ -82,14 +84,27 @@ def take_from_default():
 # wersja bardziej uniwersalna
 def take_from_default_n(folders):
     for filename in os.scandir(DEFAULT_FOLDER):
+        ''' Ważne założenie: reguły mają pierwszeństwo przed rozszerzeniami! '''
+
         moved = False
-        for ext in folders[0]:
-            if str(filename.path).endswith(ext):
-                move_file_to(filename.path, folders[0][ext])
-                moved = True
-                break
+
+        # reguły
+        for rule in folders[1]:
+            if str(rule) != 'archive' and str(rule) != 'others':
+                if str(filename.path).__contains__(rule) and not str(filename.path).endswith(rule):
+                    move_file_to(filename.path, folders[1][rule])
+                    moved = True
+                    break
+
+        # rozszerzenia
         if not moved:
-            move_file_to(filename.path, folders[1]['others'])
+            for ext in folders[0]:
+                if str(filename.path).endswith(ext):
+                    move_file_to(filename.path, folders[0][ext])
+                    moved = True
+                    break
+            if not moved:
+                move_file_to(filename.path, folders[1]['others'])
 
 
 # kompresja plików
@@ -264,3 +279,45 @@ def create_folder_for_extension(f_name, ext, folders):
 
     except FileExistsError:
         pass
+
+
+def create_folder_for_rules(f_name, rule, folders):
+    try:
+        f_path = PROJECT_FOLDER + '/' + f_name
+        os.mkdir(PROJECT_FOLDER + '/' + f_name)
+    except OSError:
+        pass
+
+    try:
+        f = open(PROJECT_FOLDER + '/' + f_name + '/__ex_r__info.abc', 'x')
+
+        f.write(rule)
+
+        folders[1][rule] = f_path
+
+    except FileExistsError:
+        pass
+
+
+# wyślij email do twórcy
+
+def send_mail(text):
+
+    sender = 'from@fromdomain.com'
+    receivers = ['to@todomain.com']
+
+    message = """From: From Person <from@fromdomain.com>
+    To: To Person <to@todomain.com>
+    Subject: SMTP e-mail test
+
+    This is a test e-mail message.
+    """
+
+    try:
+        smtpObj = smtplib.SMTP('onet.pl', 587)
+        smtpObj.sendmail(sender, receivers, message)
+        print
+        "Successfully sent email"
+    except smtplib.SMTPException:
+        print
+        "Error: unable to send email"

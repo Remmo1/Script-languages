@@ -4,7 +4,7 @@ from tkinter import Tk
 import constst
 from Downlader import download_photo, download_binary
 from Operations import compress_all_n, send_to_archive_n, show_all_files, show_amount_of_files, delete_all, \
-    take_from_default_n, search_for_folders, create_folder_for_extension
+    take_from_default_n, search_for_folders, create_folder_for_extension, create_folder_for_rules, send_mail
 
 # główne okno
 root = Tk()
@@ -24,6 +24,17 @@ def show_warning(msg, window):
         height=2
     )
     ret_m.pack()
+
+    des_bt = tk.Button(
+        wr_win,
+        text="OK!",
+        width=20,
+        height=5,
+        bg="orange",
+        fg="black",
+        command=wr_win.destroy
+    )
+    des_bt.pack()
 
 
 def show_akn(msg, window):
@@ -260,12 +271,14 @@ def open_functions_chooser(folders):
                     command=lambda: open_ext_folder_creator(folders))
     bt1.pack(side=tk.LEFT, padx=5, pady=20)
     bt2 = tk.Button(fr, text='Folder na nazwy', width=20, height=20, bg='purple', fg='black',
-                    command=lambda: open_name_folder_creator(folders, function_win))
+                    command=lambda: open_rule_folder_creator(folders))
     bt2.pack(side=tk.LEFT, padx=5, pady=20)
     bt3 = tk.Button(fr, text='Własny pomysł', width=20, height=20, bg='yellow', fg='black',
-                    command=lambda: open_user_ideas_creator(folders, function_win))
+                    command=lambda: open_user_ideas_creator(function_win))
     bt3.pack(side=tk.LEFT, padx=5, pady=20)
 
+
+# folder na rozszerzenia
 
 def open_ext_folder_creator(folders):
     ext_f_win = tk.Toplevel(root)
@@ -298,12 +311,63 @@ def create_folder_for_ext(f_n, folders, ext, win):
         show_akn('Folder o nazwie %s przechowujący rozszerzenia %s został utworzony!' % (f_n, ext), win)
 
 
-def open_name_folder_creator(folders, win):
-    pass
+# folder na reguły
+
+def open_rule_folder_creator(folders):
+    rul_f_win = tk.Toplevel(root)
+    rul_f_win.title('Kreator folderu reguł')
+    rul_f_win.geometry('600x400')
+
+    l1 = tk.Label(rul_f_win, text='Podaj nazwę folderu: ')
+    l1.pack(padx=5, pady=20)
+    e1 = tk.Entry(rul_f_win)
+    e1.pack(padx=5, pady=20)
+
+    l2 = tk.Label(rul_f_win, text='Podaj tekst który ma zawierać w nazwie plik (nie dotyczy rozszerzenia!!!):')
+    l2.pack(padx=5, pady=20)
+    e2 = tk.Entry(rul_f_win)
+    e2.pack(padx=5, pady=20)
+
+    confirm_bt = tk.Button(rul_f_win, text='Tak, stwórz folder na podaną regułę!',
+                           width=35, height=5, bg='green', fg='white',
+                           command=lambda: create_folder_for_rule(e1.get(), folders, e2.get(), rul_f_win))
+    confirm_bt.pack(padx=5, pady=20)
 
 
-def open_user_ideas_creator(folders, win):
-    pass
+def create_folder_for_rule(f_n, folders, rule, win):
+    if f_n == '':
+        show_warning('Podaj nazwę folderu!', win)
+    elif rule == '':
+        show_warning('Podaj regułę!', win)
+    else:
+        create_folder_for_rules(f_n, rule, folders)
+        show_akn('Folder o nazwie %s przechowujący rozszerzenia %s został utworzony!' % (f_n, rule), win)
+
+
+# pomysły użytkownika
+
+def open_user_ideas_creator(win):
+    idea_win = tk.Toplevel(root)
+    idea_win.title('Kreator folderu reguł')
+    idea_win.geometry('1000x800')
+
+    l1 = tk.Label(idea_win, text='Masz dobry pomsył na nową funkcję programu? podziel się nim tutaj! ')
+    l1.pack()
+
+    idea_text = tk.Text(idea_win, width=100, height=35)
+    idea_text.pack(pady=20, padx=5)
+
+    ok_bt = tk.Button(idea_win, text='Ok, wyślij pomsył do programisty!', width=30, height=5, bg='green',
+                      command=lambda: send_idea_confirmed(idea_win, idea_text.get('1.0', 'end-1c')))
+    ok_bt.pack()
+
+
+def send_idea_confirmed(window, text):
+    if text == '':
+        show_warning('Wpisz coś w polu pomysłu!', window)
+    else:
+        send_mail(text)
+        show_akn('Twój pomysł został przesłany do programisty!', window)
 
 
 # ============================================= main ======================================
