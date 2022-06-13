@@ -4,7 +4,7 @@ from tkinter import Tk
 import constst
 from Downlader import download_photo, download_binary
 from Operations import compress_all_n, send_to_archive_n, show_all_files, show_amount_of_files, delete_all, \
-    take_from_default_n, search_for_folders, create_folder_for_extension, create_folder_for_rules, send_mail
+    take_from_default_n, search_for_folders, create_folder_for_extension, create_folder_for_rules, send_idea
 
 # główne okno
 root = Tk()
@@ -366,7 +366,7 @@ def send_idea_confirmed(window, text):
     if text == '':
         show_warning('Wpisz coś w polu pomysłu!', window)
     else:
-        send_mail(text)
+        send_idea(text)
         show_akn('Twój pomysł został przesłany do programisty!', window)
 
 

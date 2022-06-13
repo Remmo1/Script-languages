@@ -9,7 +9,7 @@ from email.mime.text import MIMEText
 from functools import cmp_to_key
 
 from constst import DEFAULT_FOLDER, PHOTO_FOLDER, BINARY_FOLDER, OTHERS_FOLDER, MAXIMUM_AMOUNT_OF_FILES, \
-    ARCHIVE_FOLDER, MAXIMUM_FILE_SIZE, PROJECT_FOLDER
+    ARCHIVE_FOLDER, MAXIMUM_FILE_SIZE, PROJECT_FOLDER, IDEAS_FOLDER
 
 
 # spis plików
@@ -90,8 +90,10 @@ def take_from_default_n(folders):
 
         # reguły
         for rule in folders[1]:
-            if str(rule) != 'archive' and str(rule) != 'others':
-                if str(filename.path).__contains__(rule) and not str(filename.path).endswith(rule):
+            rule = str(rule).lower()
+            f_n = str(filename.path).lower()
+            if rule != 'archive' and rule != 'others':
+                if f_n.__contains__(rule) and not f_n.endswith(rule):
                     move_file_to(filename.path, folders[1][rule])
                     moved = True
                     break
@@ -301,23 +303,9 @@ def create_folder_for_rules(f_name, rule, folders):
 
 # wyślij email do twórcy
 
-def send_mail(text):
-
-    sender = 'from@fromdomain.com'
-    receivers = ['to@todomain.com']
-
-    message = """From: From Person <from@fromdomain.com>
-    To: To Person <to@todomain.com>
-    Subject: SMTP e-mail test
-
-    This is a test e-mail message.
-    """
-
+def send_idea(text):
     try:
-        smtpObj = smtplib.SMTP('onet.pl', 587)
-        smtpObj.sendmail(sender, receivers, message)
-        print
-        "Successfully sent email"
-    except smtplib.SMTPException:
-        print
-        "Error: unable to send email"
+        f = open(IDEAS_FOLDER + '/' + str(str(text).__hash__() % 3000) + '.txt', 'x')
+        f.write(text)
+    except FileExistsError:
+        pass

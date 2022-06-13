@@ -1,3 +1,5 @@
+import smtplib
+
 import Operations
 import constst
 from Operations import compress_file, delete_all, create_folder_for_extension
@@ -16,4 +18,33 @@ from Operations import compress_file, delete_all, create_folder_for_extension
 #print(ord(''))
 
 #create_folder_for_extension('f1', 'ddd')
+
+"""# Import smtplib for the actual sending function
+import smtplib
+
+# Import the email modules we'll need
+from email.mime.text import MIMEText
+
+# Open a plain text file for reading.  For this example, assume that
+# the text file contains only ASCII characters.
+
+msg = MIMEText('Some text')
+
+# me == the sender's email address
+# you == the recipient's email address
+me = 'remigiusz.pisarski@onet.pl'
+you = 'remigiusz.pisarski@onet.pl'
+
+msg['Subject'] = 'The contents of'
+msg['From'] = me
+msg['To'] = you
+
+# Send the message via our own SMTP server, but don't include the
+# envelope header.
+print('a')
+s = smtplib.SMTP('smtp.poczta.onet.pl', 465)
+print('b')
+s.starttls()
+s.sendmail(me, [you], msg.as_string())
+s.quit()"""
 
