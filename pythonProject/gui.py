@@ -6,12 +6,17 @@ from Downlader import download_photo, download_binary
 from Operations import compress_all_n, send_to_archive_n, show_all_files, show_amount_of_files, delete_all, \
     take_from_default_n, search_for_folders, create_folder_for_extension, create_folder_for_rules, send_idea
 
-# główne okno
+""" main project window """
 root = Tk()
 
 
-# okienka pomocnicze wyświetlające ostrzeżenia i potwierdzenia
 def show_warning(msg, window):
+    """
+    it shows warning with the given message on the top of the given window
+    :param msg:
+    :param window:
+    :return:
+    """
     wr_win = tk.Toplevel(window)
     wr_win.title('Błąd')
     wr_win.geometry('450x80')
@@ -38,6 +43,12 @@ def show_warning(msg, window):
 
 
 def show_akn(msg, window):
+    """
+    it shows aknowledgement with the given message on the top of the given window
+    :param msg:
+    :param window:
+    :return:
+    """
     ak_win = tk.Toplevel(window)
     ak_win.title('Ukończono!')
     ak_win.geometry('450x80')
@@ -63,8 +74,14 @@ def show_akn(msg, window):
     des_bt.pack()
 
 
-# sekcja pobierania plikow
 def downloading(name, choice_d, d_win):
+    """
+    downloads photo or binary and saves it as given name and shows warning/akn
+    :param name:
+    :param choice_d:
+    :param d_win:
+    :return:
+    """
     if name == '':
         show_warning('Wpisz w szarym polu jak chcesz nazwać plik!!!', d_win)
     elif choice_d == 0:
@@ -79,6 +96,10 @@ def downloading(name, choice_d, d_win):
 
 
 def open_download_choice():
+    """
+    opens window with download choice
+    :return:
+    """
     download_window = tk.Toplevel(root)
     download_window.title('Pobieranie losowych plików')
     download_window.geometry('500x500')
@@ -123,13 +144,23 @@ def open_download_choice():
     lets_download.pack()
 
 
-# sekcja przenoszenia
 def move_files_from_default(win, folders):
+    """
+    moves files from the default folder to project
+    :param win:
+    :param folders:
+    :return:
+    """
     take_from_default_n(folders)
     show_akn('Pliki zostały przeniesione do odpowiednich folderów.', win)
 
 
 def open_mover(folders):
+    """
+    opens window with moving button
+    :param folders:
+    :return:
+    """
     mover_win = tk.Toplevel(root)
     mover_win.title('Przenoszenie')
     mover_win.geometry('900x300')
@@ -157,13 +188,23 @@ def open_mover(folders):
     mover_ok_bt.pack()
 
 
-# sekcja kompresji
 def compressing(win, folders):
+    """
+    uses compress_all_n function that compress every file in the project when neccessary
+    :param win:
+    :param folders:
+    :return:
+    """
     compress_all_n(folders)
     show_akn('Pliki zostały pomyślnie skopresowane.', win)
 
 
 def open_compresser(folders):
+    """
+    opens compressing window
+    :param folders:
+    :return:
+    """
     compresser_win = tk.Toplevel(root)
     compresser_win.title('Kompresja')
     compresser_win.geometry('900x300')
@@ -190,13 +231,23 @@ def open_compresser(folders):
     compresser_ok_bt.pack()
 
 
-# sekcja archiwizacji
 def archiving(win, folders):
+    """
+    archives every file in project when neccessary
+    :param win:
+    :param folders:
+    :return:
+    """
     send_to_archive_n(folders)
     show_akn('Pliki zostały pomyślnie przeniesione do archiwum.', win)
 
 
 def open_archivizer(folders):
+    """
+    opens archive buttton
+    :param folders:
+    :return:
+    """
     archiver_win = tk.Toplevel(root)
     archiver_win.title('Archiwizacja')
     archiver_win.geometry('900x300')
@@ -223,14 +274,21 @@ def open_archivizer(folders):
     archiver_ok_bt.pack()
 
 
-# sekcja usuwania
-
 def deleting(win):
+    """
+    deletes files from the archive
+    :param win:
+    :return:
+    """
     delete_all(constst.ARCHIVE_FOLDER)
     show_akn('Pliki z archiwum zostały trwale usunięte', win)
 
 
 def open_deleter():
+    """
+    opens deleting window
+    :return:
+    """
     deleter_win = tk.Toplevel(root)
     deleter_win.title('Usuwanie')
     deleter_win.geometry('900x300')
@@ -257,9 +315,12 @@ def open_deleter():
     deleter_ok_bt.pack()
 
 
-# sekcja własnych funkcji
-
 def open_functions_chooser(folders):
+    """
+    opens functions chooser window
+    :param folders:
+    :return:
+    """
     function_win = tk.Toplevel(root)
     function_win.title('Kreator funkcji')
     function_win.geometry('600x400')
@@ -278,9 +339,12 @@ def open_functions_chooser(folders):
     bt3.pack(side=tk.LEFT, padx=5, pady=20)
 
 
-# folder na rozszerzenia
-
 def open_ext_folder_creator(folders):
+    """
+    opens extension folder creator
+    :param folders:
+    :return:
+    """
     ext_f_win = tk.Toplevel(root)
     ext_f_win.title('Kreator folderu rozszerzeń')
     ext_f_win.geometry('600x400')
@@ -302,6 +366,14 @@ def open_ext_folder_creator(folders):
 
 
 def create_folder_for_ext(f_n, folders, ext, win):
+    """
+    creates folder for the given extension
+    :param f_n:
+    :param folders:
+    :param ext:
+    :param win:
+    :return:
+    """
     if f_n == '':
         show_warning('Podaj nazwę folderu!', win)
     elif ext == '':
@@ -311,9 +383,12 @@ def create_folder_for_ext(f_n, folders, ext, win):
         show_akn('Folder o nazwie %s przechowujący rozszerzenia %s został utworzony!' % (f_n, ext), win)
 
 
-# folder na reguły
-
 def open_rule_folder_creator(folders):
+    """
+    opens rules foler creator
+    :param folders:
+    :return:
+    """
     rul_f_win = tk.Toplevel(root)
     rul_f_win.title('Kreator folderu reguł')
     rul_f_win.geometry('600x400')
@@ -335,6 +410,14 @@ def open_rule_folder_creator(folders):
 
 
 def create_folder_for_rule(f_n, folders, rule, win):
+    """
+    creates folder for the given rule
+    :param f_n:
+    :param folders:
+    :param rule:
+    :param win:
+    :return:
+    """
     if f_n == '':
         show_warning('Podaj nazwę folderu!', win)
     elif rule == '':
@@ -344,10 +427,13 @@ def create_folder_for_rule(f_n, folders, rule, win):
         show_akn('Folder o nazwie %s przechowujący rozszerzenia %s został utworzony!' % (f_n, rule), win)
 
 
-# pomysły użytkownika
-
 def open_user_ideas_creator(win):
-    idea_win = tk.Toplevel(root)
+    """
+    
+    :param win:
+    :return:
+    """
+    idea_win = tk.Toplevel(win)
     idea_win.title('Kreator folderu reguł')
     idea_win.geometry('1000x800')
 

@@ -2,19 +2,18 @@ import bz2
 import datetime
 import os
 import shutil
-import smtplib
-import sys
-import zipfile
-from email.mime.text import MIMEText
 from functools import cmp_to_key
 
 from constst import DEFAULT_FOLDER, PHOTO_FOLDER, BINARY_FOLDER, OTHERS_FOLDER, MAXIMUM_AMOUNT_OF_FILES, \
     ARCHIVE_FOLDER, MAXIMUM_FILE_SIZE, PROJECT_FOLDER, IDEAS_FOLDER
 
 
-# spis plików
-
-def show_in_folder(folder):
+def show_in_folder(folder: str):
+    """
+    function that shows files in folder given by a parameter
+    :param folder:
+    :return:
+    """
     for file in os.scandir(folder):
         tokens = str(file.path).split('/')
         print(tokens[len(tokens) - 1])
@@ -22,6 +21,10 @@ def show_in_folder(folder):
 
 
 def show_all_files():
+    """
+    function that shows all files in the basic folders, console version
+    :return:
+    """
     print('\n ====== Spis plików ========\n')
     print('Pliki z archiwum:')
     show_in_folder(ARCHIVE_FOLDER)
@@ -39,9 +42,11 @@ def show_all_files():
     show_in_folder(OTHERS_FOLDER)
 
 
-# ilość plików w folderach
-
 def show_amount_of_files():
+    """
+    showing amount of files in each of the basic directory
+    :return:
+    """
     print(f'Liczba plików w archiwum:\t\t\t {amount_of_files_in(ARCHIVE_FOLDER)}')
     print(f'Liczba plików w folderze pobrane:\t {amount_of_files_in(DEFAULT_FOLDER)}')
     print(f'Liczba plików w folderze binaries:\t {amount_of_files_in(BINARY_FOLDER)}')
@@ -49,9 +54,13 @@ def show_amount_of_files():
     print(f'Liczba plików w folderze inne:\t\t {amount_of_files_in(OTHERS_FOLDER)}')
 
 
-# Przerzucanie plików między folderami
-
 def move_file_to(file_path, target_directory):
+    """
+    moves file (given by its path) to the directory
+    :param file_path:
+    :param target_directory:
+    :return:
+    """
     try:
         shutil.move(file_path, target_directory)
         return 0
@@ -61,17 +70,29 @@ def move_file_to(file_path, target_directory):
 
 
 def move_photo(file_path):
+    """
+    moves .jpg file to photos folder
+    :param file_path:
+    :return:
+    """
     move_file_to(file_path, PHOTO_FOLDER)
 
 
 def move_binary_file(file_path):
+    """
+    moves .bin file to binaries folder
+    :param file_path:
+    :return:
+    """
     move_file_to(file_path, BINARY_FOLDER)
 
 
-# metoda biorąca pliki z folderu domyślnego i wrzucająca je do projektu
-
-# wersja podstawowa
 def take_from_default():
+    """
+    Takes all files from the default Downloads folder and puts it into project folder.
+    This is baisic version, sorts only .jpg and .bin files
+    :return:
+    """
     for filename in os.scandir(DEFAULT_FOLDER):
         if filename.is_file() and str(filename.path).endswith('.jpg'):
             move_photo(filename.path)
@@ -81,14 +102,19 @@ def take_from_default():
             move_file_to(filename.path, OTHERS_FOLDER)
 
 
-# wersja bardziej uniwersalna
 def take_from_default_n(folders):
+    """
+    Takes all files from the default Downloads folder and puts it into project folder.
+    This is advanced version. It sorts by rules and extensions (user can add his ideas).
+    :param folders:
+    :return:
+    """
     for filename in os.scandir(DEFAULT_FOLDER):
         ''' Ważne założenie: reguły mają pierwszeństwo przed rozszerzeniami! '''
 
         moved = False
 
-        # reguły
+        # rules
         for rule in folders[1]:
             rule = str(rule).lower()
             f_n = str(filename.path).lower()
@@ -98,7 +124,7 @@ def take_from_default_n(folders):
                     moved = True
                     break
 
-        # rozszerzenia
+        # extensions
         if not moved:
             for ext in folders[0]:
                 if str(filename.path).endswith(ext):
@@ -109,16 +135,20 @@ def take_from_default_n(folders):
                 move_file_to(filename.path, folders[1]['others'])
 
 
-# kompresja plików
-
 def compress_file(file_path):
+    """
+    Compresses file given by its path.
+    It doesn't delete the old file, only adds compressed version.
+    :param file_path:
+    :return:
+    """
 
-    # bierzemy nazwę pliku
+    # we're taking file name
     f_n = file_path.split('/')
     f_n = f_n[len(f_n) - 1]
     old_f_n = f_n
 
-    # ucinamy rozszerzenie
+    # cutting extension
     act = len(f_n) - 1
     c = f_n[act]
     while c != '.':
@@ -126,7 +156,7 @@ def compress_file(file_path):
         c = f_n[act]
         f_n = f_n[0:act]
 
-    # tworzymy nowy plik
+    # creating new file
     f_n = f_n + '-compressed.bz2'
     new_f_n = str(file_path).replace(old_f_n, f_n)
 
@@ -145,13 +175,12 @@ def compress_file(file_path):
     print(f'\tPo kompresji: {os.stat(new_f_n).st_size:,}')
 
 
-def decompress_file(file_path):
-    with bz2.open(file_path, "rb") as fin:
-        data = fin.read()
-        print(f"Plik po dekompresji: {sys.getsizeof(data)}")
-
-
 def compress_all_files(folder):
+    """
+    compresses every file in folder given by a parameter
+    :param folder:
+    :return:
+    """
     act_f = folder.split('/')
     act_f = act_f[len(act_f) - 1]
     print(f'Folder {act_f}')
@@ -162,15 +191,23 @@ def compress_all_files(folder):
 
 
 def compress_all_n(folders):
+    """
+    compresses every file in project (new version that takes care about new rules and extensions)
+    :param folders:
+    :return:
+    """
     for ext_f in folders[0]:
         compress_all_files(folders[0][ext_f])
     for rule_f in folders[1]:
         compress_all_files(folders[1][rule_f])
 
 
-# archiwizowanie plików
-
 def amount_of_files_in(folder):
+    """
+    it returns amount of files in the folder given by a parameter
+    :param folder:
+    :return:
+    """
     i = 0
     for _ in os.scandir(folder):
         i = i + 1
@@ -178,6 +215,12 @@ def amount_of_files_in(folder):
 
 
 def comparator(a, b):
+    """
+    help function, that compares dataTime objects
+    :param a:
+    :param b:
+    :return:
+    """
     if a[0].seconds == b[0].seconds:
         return a[0].microseconds - b[0].microseconds
     else:
@@ -185,6 +228,11 @@ def comparator(a, b):
 
 
 def check_in_folder(folder):
+    """
+    moves files to archive, when in the folder given by a parameter there are too many files
+    :param folder:
+    :return:
+    """
     folder_name = folder.split('/')
     folder_name = folder_name[len(folder_name) - 1]
 
@@ -213,36 +261,45 @@ def check_in_folder(folder):
 
 
 def send_to_archive_n(folders):
+    """
+    moves files to archive when neccessary for the whole project
+    :param folders:
+    :return:
+    """
     for ext_f in folders[0]:
         check_in_folder(folders[0][ext_f])
     for rule_f in folders[1]:
         check_in_folder(folders[1][rule_f])
 
 
-# rozpakowanie folderu
-
-def unzip_folder(folder_name):
-    zf = zipfile.ZipFile(folder_name, 'r')
-    zf.extractall('/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/pythonProject/downloaded')
-    zf.close()
-
-
-# usuwanie z folderu
-
 def delete_all(folder):
+    """
+    deletes all files in the folder except rule or extension info
+    :param folder:
+    :return:
+    """
     for file in os.scandir(folder):
         if not str(file.path).endswith('__ex_r__info.abc'):
             os.remove(file)
 
 
-# funkcje użytkownika
-
 def return_file_name(path: str) -> str:
+    """
+    it returns the file name by its path
+    :param path:
+    :return:
+    """
     f_n = path.split('/')
     return f_n[len(f_n) - 1]
 
 
 def search_for_folders(folder):
+    """
+    Set up function that HAS TO BE DONE BEFORE ANY OPERATION.
+    It serach for folders and returns them as a pair (extensions, rules).
+    :param folder:
+    :return:
+    """
     folders_rules = {}
     folders_ext = {}
 
@@ -264,6 +321,13 @@ def search_for_folders(folder):
 
 
 def create_folder_for_extension(f_name, ext, folders):
+    """
+    creates folder for given extension, adds it to programm FOLDERS and creates extension info
+    :param f_name:
+    :param ext:
+    :param folders:
+    :return:
+    """
     try:
         f_path = PROJECT_FOLDER + '/' + f_name
         os.mkdir(PROJECT_FOLDER + '/' + f_name)
@@ -284,6 +348,13 @@ def create_folder_for_extension(f_name, ext, folders):
 
 
 def create_folder_for_rules(f_name, rule, folders):
+    """
+    creates folder for given rule, adds it to programm FOLDERS and creates rule info
+    :param f_name:
+    :param rule:
+    :param folders:
+    :return:
+    """
     try:
         f_path = PROJECT_FOLDER + '/' + f_name
         os.mkdir(PROJECT_FOLDER + '/' + f_name)
@@ -301,9 +372,12 @@ def create_folder_for_rules(f_name, rule, folders):
         pass
 
 
-# wyślij email do twórcy
-
 def send_idea(text):
+    """
+    saves given text as a file
+    :param text:
+    :return:
+    """
     try:
         f = open(IDEAS_FOLDER + '/' + str(str(text).__hash__() % 3000) + '.txt', 'x')
         f.write(text)
