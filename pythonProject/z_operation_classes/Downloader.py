@@ -2,8 +2,8 @@ import os
 
 import requests
 
-from Operations import move_file_to
 from constst import DEFAULT_FOLDER, DOWNLOADED_PHOTOS, DOWNLOADED_BINARIES
+from z_operation_classes.Mover import Mover
 
 
 class Downloader:
@@ -18,7 +18,7 @@ class Downloader:
         """
         response = requests.get(url)
         open(name, 'wb').write(response.content)
-        if move_file_to(name, DEFAULT_FOLDER) == -1:
+        if Mover.move_file_to(name, DEFAULT_FOLDER) == -1:
             os.remove(name)
 
     def download_photo(self, name):

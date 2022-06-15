@@ -2,14 +2,14 @@ import tkinter as tk
 from tkinter import Tk
 
 import constst
-import z_operation_classes.Archivizer
-import z_operation_classes.Compresser
-import z_operation_classes.Deleter
-from Downloader.Downloader import Downloader.download_photo()
-import z_operation_classes.Mover
-import z_operation_classes.Raporter
-import z_operation_classes.Starting
-import z_operation_classes.UserFunctions
+from z_operation_classes.Archivizer import Archivizer
+from z_operation_classes.Compresser import Compresser
+from z_operation_classes.Deleter import Deleter
+from z_operation_classes.Downloader import Downloader
+from z_operation_classes.Mover import Mover
+from z_operation_classes.Raporter import Raporter
+from z_operation_classes.Starting import Starter
+from z_operation_classes.UserFunctions import Userfunctions
 
 
 """ main project window """
@@ -93,11 +93,12 @@ def downloading(name, choice_d, d_win):
     elif choice_d == 0:
         show_warning('Wybierz jaki to ma być plik, tzn. zaznacz zdjęcie lub plik bin!', d_win)
     else:
+        d = Downloader()
         if choice_d == 1:
-            download_photo(name + '.jpg')
+            d.download_photo(name + '.jpg')
             show_akn('Zdjęcie pobrano pomyślnie, znajdziesz je w folderze Pobrane', d_win)
         elif choice_d == 2:
-            download_binary(name + '.bin')
+            d.download_binary(name + '.bin')
             show_akn('Plik bin pobrano pomyślnie, znajdziesz go w folderze Pobrane', d_win)
 
 
@@ -157,7 +158,8 @@ def move_files_from_default(win, folders):
     :param folders:
     :return:
     """
-    take_from_default_n(folders)
+    m = Mover()
+    m.take_from_default_n(folders)
     show_akn('Pliki zostały przeniesione do odpowiednich folderów.', win)
 
 
@@ -201,7 +203,8 @@ def compressing(win, folders):
     :param folders:
     :return:
     """
-    compress_all_n(folders)
+    c = Compresser()
+    c.compress_all_n(folders)
     show_akn('Pliki zostały pomyślnie skopresowane.', win)
 
 
@@ -244,7 +247,8 @@ def archiving(win, folders):
     :param folders:
     :return:
     """
-    send_to_archive_n(folders)
+    a = Archivizer()
+    a.send_to_archive_n(folders)
     show_akn('Pliki zostały pomyślnie przeniesione do archiwum.', win)
 
 
@@ -286,7 +290,7 @@ def deleting(win):
     :param win:
     :return:
     """
-    delete_all(constst.ARCHIVE_FOLDER)
+    Deleter.delete_all(constst.ARCHIVE_FOLDER)
     show_akn('Pliki z archiwum zostały trwale usunięte', win)
 
 
@@ -385,7 +389,8 @@ def create_folder_for_ext(f_n, folders, ext, win):
     elif ext == '':
         show_warning('Podaj nazwę rozszerzenia!', win)
     else:
-        create_folder_for_extension(f_n, ext, folders)
+        u = Userfunctions()
+        u.create_folder_for_extension(f_n, ext, folders)
         show_akn('Folder o nazwie %s przechowujący rozszerzenia %s został utworzony!' % (f_n, ext), win)
 
 
@@ -429,7 +434,7 @@ def create_folder_for_rule(f_n, folders, rule, win):
     elif rule == '':
         show_warning('Podaj regułę!', win)
     else:
-        create_folder_for_rules(f_n, rule, folders)
+        Userfunctions.create_folder_for_rules(f_n, rule, folders)
         show_akn('Folder o nazwie %s przechowujący rozszerzenia %s został utworzony!' % (f_n, rule), win)
 
 
@@ -458,7 +463,7 @@ def send_idea_confirmed(window, text):
     if text == '':
         show_warning('Wpisz coś w polu pomysłu!', window)
     else:
-        send_idea(text)
+        Userfunctions.send_idea(text)
         show_akn('Twój pomysł został przesłany do programisty!', window)
 
 
@@ -470,7 +475,8 @@ if __name__ == '__main__':
     root.config(width=1000)
     root.config(height=1000)
     root.eval('tk::PlaceWindow . center')
-    FOLDERS = search_for_folders(constst.PROJECT_FOLDER)
+    s = Starter()
+    FOLDERS = s.search_for_folders(constst.PROJECT_FOLDER)
 
     download_button = tk.Button(
         text="Pobierz plik",
@@ -551,7 +557,7 @@ if __name__ == '__main__':
         height=5,
         bg="yellow",
         fg="blue",
-        command=show_all_files
+        command=Raporter.show_all_files
     )
 
     r2 = tk.Button(
@@ -561,7 +567,7 @@ if __name__ == '__main__':
         height=5,
         bg="green",
         fg="white",
-        command=show_amount_of_files
+        command=Raporter.show_amount_of_files
     )
 
     r1.pack(padx=5, pady=10, side=tk.LEFT)
