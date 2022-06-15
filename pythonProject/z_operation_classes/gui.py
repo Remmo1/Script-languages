@@ -2,9 +2,15 @@ import tkinter as tk
 from tkinter import Tk
 
 import constst
-from Downlader import download_photo, download_binary
-from Operations import compress_all_n, send_to_archive_n, show_all_files, show_amount_of_files, delete_all, \
-    take_from_default_n, search_for_folders, create_folder_for_extension, create_folder_for_rules, send_idea
+import z_operation_classes.Archivizer
+import z_operation_classes.Compresser
+import z_operation_classes.Deleter
+from Downloader.Downloader import Downloader.download_photo()
+import z_operation_classes.Mover
+import z_operation_classes.Raporter
+import z_operation_classes.Starting
+import z_operation_classes.UserFunctions
+
 
 """ main project window """
 root = Tk()
