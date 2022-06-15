@@ -1,8 +1,5 @@
 import smtplib
 
-import Operations
-import constst
-from Operations import compress_file, delete_all, create_folder_for_extension
 
 # compress_file('/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/pythonProject/others/covid_test.txt')
 # Operations.decompress_file('/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/pythonProject/others/covid_test-compressed.bz2')
@@ -15,7 +12,26 @@ from Operations import compress_file, delete_all, create_folder_for_extension
 #for rule in f[1]:
 #   print(rule)
 #print(chr(1))
-#print(ord(''))
+#print(ord('')
+from z_operation_classes.Starting import Starter
+from z_operation_classes.Raporter import Raporter
+
+s = Starter()
+r = Raporter()
+
+f = s.search_for_folders('/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/pythonProject')
+for i in f:
+    print(i)
+l = r.amount_of_files_in_all_folders(f)
+for i in l:
+    print(i)
+"""
+print(r.files_in_folder('/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/pythonProject'))
+#folders_files = r.take_all_files()
+#print(folders_files)
+"""
+
+
 
 #create_folder_for_extension('f1', 'ddd')
 

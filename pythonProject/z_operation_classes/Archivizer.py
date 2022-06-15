@@ -1,5 +1,6 @@
 import datetime
 import os
+from functools import cmp_to_key
 
 from constst import MAXIMUM_AMOUNT_OF_FILES, ARCHIVE_FOLDER
 from z_operation_classes.Mover import Mover
@@ -48,7 +49,7 @@ class Archivizer:
                 duration = today - modified_date
                 taken_files.append((duration, filename.path))
 
-            taken_files = sorted(taken_files, key=self.cmp_to_key(self.comparator))
+            taken_files = sorted(taken_files, key=cmp_to_key(self.comparator))
             i = len(taken_files)
 
             print('Status plikow w folderze %s' % folder_name)

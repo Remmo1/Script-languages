@@ -467,6 +467,46 @@ def send_idea_confirmed(window, text):
         show_akn('Twój pomysł został przesłany do programisty!', window)
 
 
+def open_default_raport():
+    raport_win = tk.Toplevel(root)
+    raport_win.title('Raport ogólny')
+    raport_win.geometry('600x400')
+
+    scrollbar = tk.Scrollbar(raport_win)
+    scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+    mylist = tk.Listbox(raport_win, yscrollcommand=scrollbar.set, width=100)
+
+    r = Raporter()
+    data = r.take_all_files()
+
+    for line in data:
+        mylist.insert(tk.END, line)
+
+    mylist.pack(side=tk.LEFT, fill=tk.BOTH)
+    scrollbar.config(command=mylist.yview)
+
+
+def open_counting_raport(folders):
+    raport_win = tk.Toplevel(root)
+    raport_win.title('Raport liczący')
+    raport_win.geometry('600x400')
+
+    scrollbar = tk.Scrollbar(raport_win)
+    scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+    mylist = tk.Listbox(raport_win, yscrollcommand=scrollbar.set, width=100)
+
+    r = Raporter()
+    data = r.amount_of_files_in_all_folders(folders)
+
+    for line in data:
+        mylist.insert(tk.END, line)
+
+    mylist.pack(side=tk.LEFT, fill=tk.BOTH)
+    scrollbar.config(command=mylist.yview)
+
+
 # ============================================= main ======================================
 
 if __name__ == '__main__':
@@ -557,7 +597,7 @@ if __name__ == '__main__':
         height=5,
         bg="yellow",
         fg="blue",
-        command=Raporter.show_all_files
+        command=open_default_raport
     )
 
     r2 = tk.Button(
@@ -567,7 +607,7 @@ if __name__ == '__main__':
         height=5,
         bg="green",
         fg="white",
-        command=Raporter.show_amount_of_files
+        command=lambda: open_counting_raport(FOLDERS)
     )
 
     r1.pack(padx=5, pady=10, side=tk.LEFT)
