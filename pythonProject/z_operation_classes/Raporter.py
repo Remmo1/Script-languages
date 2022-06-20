@@ -1,4 +1,5 @@
 import os
+from typing import List
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -11,24 +12,25 @@ from z_operation_classes.Starting import Starter
 
 
 class Raporter:
+
     """
     class responsible for creating raports
     """
 
     @staticmethod
-    def show_in_folder(folder: str):
+    def show_in_folder(folder: str) -> type(None):
         """
         function that shows files in folder given by a parameter
         :param folder:
         :return:
         """
         for file in os.scandir(folder):
-            tokens = str(file.path).split('/')
+            tokens = str(file.path).split('/') # noqa
             print(tokens[len(tokens) - 1])
         print('\n')
 
     @staticmethod
-    def files_in_folder(folder: str) -> [str]:
+    def files_in_folder(folder: str) -> List[str]:
         """
         function that returns files in folder given by a parameter as a string list
         :param folder:
@@ -36,11 +38,11 @@ class Raporter:
         """
         results = [str]
         for file in os.scandir(folder):
-            tokens = str(file.path).split('/')
+            tokens = str(file.path).split('/') # noqa
             results.append(tokens[len(tokens) - 1])
         return results
 
-    def show_all_files(self):
+    def show_all_files(self) -> type(None):
         """
         function that shows all files in the basic folders, console version
         :return:
@@ -61,28 +63,8 @@ class Raporter:
         print('Inne')
         self.show_in_folder(OTHERS_FOLDER)
 
-    def take_all_files(self):
-        folder_files = {str: [str]}
-
-        for f in os.scandir(PROJECT_FOLDER):
-            if os.path.isdir(f):
-                for fi in os.scandir(f):
-                    f_n = Starter.return_file_name(fi.path)
-                    if os.path.isfile(fi) and (f_n == '__ex_r__info.abc'):
-                        folder_files[Starter.return_file_name(f.path)] = self.files_in_folder(f.path)
-                        break
-
-        ret2 = []
-        for folder in folder_files:
-            ret2.append('Folder: ' + str(folder) + str(':\n'))
-            for file in folder_files[folder]:
-                line = str(file) + str('\n')
-                ret2.append(line)
-
-        return ret2
-
     @staticmethod
-    def show_amount_of_files():
+    def show_amount_of_files() -> type(None):
         """
         showing amount of files in each of the basic directory
         :return:
@@ -94,7 +76,12 @@ class Raporter:
         print(f'Liczba plików w folderze inne:\t\t {Archivizer.amount_of_files_in(OTHERS_FOLDER)}')
 
     @staticmethod
-    def amount_of_files_in_all_folders(folders):
+    def amount_of_files_in_all_folders(folders) -> List[str]:
+        """
+        counts amount of files in every project folder
+        :param folders:
+        :return: ret - messages that are used in GUI
+        """
         ret = []
         for ext_f in folders[0].values():
             ret.append('Liczba plików w folderze %s: %s' %
@@ -107,13 +94,23 @@ class Raporter:
 
     @staticmethod
     def take_csv_files():
+        """
+        creates list of files stored in csv folder
+        :return: ret - list of files in csv folder
+        """
         ret = []
         for f in os.scandir(CSV_FOLDER):
             ret.append(f)
         return ret
 
     @staticmethod
-    def detect_new_csv_files(old_l, new_l):
+    def detect_new_csv_files(old_l, new_l) -> List[str]:
+        """
+        compares old file list in csv folder with new and returns new files as list
+        :param old_l:
+        :param new_l:
+        :return: ret - list of new files in csv folder
+        """
         ret = []
 
         i = 0
@@ -127,7 +124,12 @@ class Raporter:
         return ret
 
     @staticmethod
-    def new_csv_file_arrived(file):
+    def new_csv_file_arrived(file: str):
+        """
+        takes data to raport and draws plot
+        :param file:
+        :return: ret - information used in csv raports
+        """
         df = pd.read_csv(file, sep='\t')
         df.plot()
         plt.show()
@@ -145,25 +147,32 @@ class Raporter:
 
         return ret
 
-    def folders_and_files_in_project(self):
+    @staticmethod
+    def folders_and_files_in_project():
+        """
+        creates list of all files and folders used in project
+        :return: ret - list of folders and files
+        """
         ret = []
         for folder in os.scandir(PROJECT_FOLDER):
             is_important_folder = False
-            if os.path.isdir(folder):
-                for file in os.scandir(folder):
+            if os.path.isdir(folder): # noqa
+                for file in os.scandir(folder): # noqa
                     if str(file).__contains__('__ex_r__info.abc'):
                         is_important_folder = True
                         break
                 if is_important_folder:
                     ret.append(folder)
-                    for file in os.scandir(folder):
+                    for file in os.scandir(folder): # noqa
                         ret.append(file)
 
-        l = len(ret)
-        for i in range(0, l):
+        length = len(ret)
+        for i in range(0, length):
             if os.path.isdir(ret[i].path):
                 ret[i] = 'Folder ' + ret[i].name
             else:
                 ret[i] = ret[i].name
+
+        ret = filter(lambda f: f != '__ex_r__info.abc', ret)
 
         return ret

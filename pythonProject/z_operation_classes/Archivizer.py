@@ -1,26 +1,32 @@
 import datetime
 import os
 from functools import cmp_to_key
+from typing import List
 
 from constst import MAXIMUM_AMOUNT_OF_FILES, ARCHIVE_FOLDER
 from z_operation_classes.Mover import Mover
 
 
 class Archivizer:
+    """
+    class responsible for archiving files
+    """
+
     @staticmethod
-    def amount_of_files_in(folder):
+    def amount_of_files_in(folder: str) -> int:
         """
         it returns amount of files in the folder given by a parameter
         :param folder:
-        :return:
+        :return: i: amount of files in folder
         """
-        i = 0
-        for _ in os.scandir(folder):
-            i = i + 1
+        i: int = 0
+        for f in os.scandir(folder):
+            if not str(f).__contains__('__ex_r__info.abc'):
+                i = i + 1
         return i
 
     @staticmethod
-    def comparator(a, b):
+    def comparator(a, b) -> int:
         """
         help function, that compares dataTime objects
         :param a:
@@ -32,11 +38,11 @@ class Archivizer:
         else:
             return a[0].seconds - b[0].seconds
 
-    def check_in_folder(self, folder):
+    def check_in_folder(self, folder: str) -> List[str]:
         """
         moves files to archive, when in the folder given by a parameter there are too many files
         :param folder:
-        :return:
+        :return: ret - messages that are used in GUI
         """
         folder_name = folder.split('/')
         folder_name = folder_name[len(folder_name) - 1]
@@ -46,9 +52,9 @@ class Archivizer:
             taken_files = []
             today = datetime.datetime.today()
             for filename in os.scandir(folder):
-                modified_date = datetime.datetime.fromtimestamp(os.path.getmtime(filename.path))
+                modified_date = datetime.datetime.fromtimestamp(os.path.getmtime(filename.path))  # noqa
                 duration = today - modified_date
-                taken_files.append((duration, filename.path))
+                taken_files.append((duration, filename.path))  # noqa
 
             taken_files = sorted(taken_files, key=cmp_to_key(self.comparator))
             i = len(taken_files)
@@ -67,17 +73,17 @@ class Archivizer:
             ret.append('Brak plikow do archiwizacji / usuniecia w folderze %s' % folder_name)
         return ret
 
-    def send_to_archive_n(self, folders):
+    def send_to_archive_n(self, folders: str) -> List[str]:
         """
         moves files to archive when neccessary for the whole project
         :param folders:
-        :return:
+        :return: ret - messages that are used in GUI
         """
         ret = []
         for ext_f in folders[0]:
-            ret.append(self.check_in_folder(folders[0][ext_f]))
+            ret.append(self.check_in_folder(folders[0][ext_f])) # noqa
         for rule_f in folders[1]:
-            ret.append(self.check_in_folder(folders[1][rule_f]))
+            ret.append(self.check_in_folder(folders[1][rule_f])) # noqa
 
         ret = [element for sublist in ret for element in sublist]
 

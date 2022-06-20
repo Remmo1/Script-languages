@@ -1,6 +1,11 @@
 class Deleter:
+
+    """
+    class responsible for deleting files
+    """
+
     @staticmethod
-    def delete_all(folder):
+    def delete_all(folder: str):
         """
         deletes all files in the folder except rule or extension info
         :param folder:
@@ -8,5 +13,5 @@ class Deleter:
         """
         import os
         for file in os.scandir(folder):
-            if not str(file.path).endswith('__ex_r__info.abc'):
-                os.remove(file)
+            if not str(file.path).endswith('__ex_r__info.abc'): # noqa
+                os.remove(file) # noqa

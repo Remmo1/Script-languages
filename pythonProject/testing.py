@@ -14,6 +14,8 @@ import smtplib
 #   print(rule)
 #print(chr(1))
 #print(ord('')
+from typing import List
+
 from z_operation_classes.Starting import Starter
 from z_operation_classes.Raporter import Raporter
 
@@ -68,4 +70,35 @@ s = smtplib.SMTP('smtp.poczta.onet.pl', 465)
 print('b')
 s.starttls()
 s.sendmail(me, [you], msg.as_string())
-s.quit()"""
+s.quit()
+
+import tkinter as tk
+
+root = tk.Tk()
+root.geometry("400x600")
+
+w = tk.Label(root, text='GeeksForGeeks', font="50")
+
+w.pack()
+
+scroll_bar = tk.Scrollbar(root)
+
+scroll_bar.pack(side=tk.RIGHT,
+                fill=tk.Y)
+
+mylist = tk.Listbox(root, yscrollcommand=scroll_bar.set, width=400)
+
+for line in range(1, 26):
+    mylist.insert(tk.END, "Geeks " + str(line))
+
+t = tk.Text(root, font=('Helvatical bold', 50))
+t.insert(tk.INSERT, 'abc')
+mylist.insert(tk.END, t.get('1.0', 'end-1c'))
+
+mylist.pack(side=tk.LEFT, fill=tk.BOTH)
+
+scroll_bar.config(command=mylist.yview)
+
+root.mainloop()
+
+"""

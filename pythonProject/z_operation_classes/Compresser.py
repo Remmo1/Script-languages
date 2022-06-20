@@ -1,17 +1,23 @@
 import bz2
 import os
+from typing import List
 
 from constst import MAXIMUM_FILE_SIZE
 
 
 class Compresser:
+
+    """
+    class responsible for compressing bigger files
+    """
+
     @staticmethod
-    def compress_file(file_path):
+    def compress_file(file_path: str) -> (int, List[str]):
         """
         Compresses file given by its path.
         It doesn't delete the old file, only adds compressed version.
         :param file_path:
-        :return:
+        :return: (n_f_s, ret) - (new compressed file size, messages that are used in GUI)
         """
 
         # we're taking file name
@@ -50,11 +56,11 @@ class Compresser:
 
         return n_f_s, ret
 
-    def compress_all_files(self, folder):
+    def compress_all_files(self, folder: str) -> List[str]:
         """
         compresses every file in folder given by a parameter
         :param folder:
-        :return:
+        :return: ret - messages that are used in GUI
         """
         ret = []
         act_f = folder.split('/')
@@ -63,9 +69,9 @@ class Compresser:
         was_sth_to_do = False
 
         for filename in os.scandir(folder):
-            act_f_s = os.path.getsize(filename.path)
+            act_f_s = os.path.getsize(filename.path) # noqa
             if act_f_s > MAXIMUM_FILE_SIZE:
-                msg = self.compress_file(filename.path)
+                msg = self.compress_file(filename.path) # noqa
                 ret.append(msg[1])
                 was_sth_to_do = True
 
@@ -74,17 +80,17 @@ class Compresser:
 
         return ret
 
-    def compress_all_n(self, folders):
+    def compress_all_n(self, folders: str) -> List[str]:
         """
         compresses every file in project (new version that takes care about new rules and extensions)
         :param folders:
-        :return:
+        :return: ret - messages that are used in GUI
         """
         ret = []
         for ext_f in folders[0]:
-            ret.append(self.compress_all_files(folders[0][ext_f]))
+            ret.append(self.compress_all_files(folders[0][ext_f])) # noqa
         for rule_f in folders[1]:
-            ret.append(self.compress_all_files(folders[1][rule_f]))
+            ret.append(self.compress_all_files(folders[1][rule_f])) # noqa
 
         ret = [element for sublist in ret for element in sublist]
 

@@ -6,7 +6,7 @@ from constst import PROJECT_FOLDER, IDEAS_FOLDER
 class Userfunctions:
 
     @staticmethod
-    def create_folder_for_extension(f_name, ext, folders):
+    def create_folder_for_extension(f_name: str, ext: str, folders) -> type(None):
         """
         creates folder for given extension, adds it to programm FOLDERS and creates extension info
         :param f_name:
@@ -27,13 +27,13 @@ class Userfunctions:
 
             f.write(ext)
 
-            folders[0][ext] = f_path
+            folders[0][ext] = f_path # noqa
 
         except FileExistsError:
             pass
 
     @staticmethod
-    def create_folder_for_rules(f_name, rule, folders):
+    def create_folder_for_rules(f_name: str, rule: str, folders) -> type(None):
         """
         creates folder for given rule, adds it to programm FOLDERS and creates rule info
         :param f_name:
@@ -52,13 +52,13 @@ class Userfunctions:
 
             f.write(rule)
 
-            folders[1][rule] = f_path
+            folders[1][rule] = f_path # noqa
 
         except FileExistsError:
             pass
 
     @staticmethod
-    def send_idea(text):
+    def send_idea(text: str) -> type(None):
         """
         saves given text as a file
         :param text:

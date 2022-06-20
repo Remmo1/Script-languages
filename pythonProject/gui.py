@@ -152,7 +152,7 @@ def open_download_choice():
 
 def move_files_from_default(win, folders):
     """
-    moves files from the default folder to project
+    moves files from the default folder to project, detect csv files and create raports for them
     :param win:
     :param folders:
     :return:
@@ -203,6 +203,13 @@ def open_mover(folders):
 
 
 def csv_raporter(win, old_f, new_f):
+    """
+    creates raport for csv files
+    :param win:
+    :param old_f:
+    :param new_f:
+    :return:
+    """
     r = Raporter()
     arrived = r.detect_new_csv_files(old_f, new_f)
 
@@ -210,7 +217,7 @@ def csv_raporter(win, old_f, new_f):
         csv_rap_win = tk.Toplevel(win)
         csv_rap_win.title('Raport z pliku csv')
         csv_rap_win.geometry('1100x500')
-        properties_f = r.new_csv_file_arrived(file.path)
+        properties_f = r.new_csv_file_arrived(file.path) # noqa
 
         title_l = tk.Label(csv_rap_win, text='Wykryto nowy plik .csv: ' + str(properties_f[0]),
                            font=('Helvatical bold', 36))
@@ -255,6 +262,12 @@ def compressing(win, folders):
 
 
 def compressing_raport(win, msg):
+    """
+    creates raport after compressing
+    :param win:
+    :param msg:
+    :return:
+    """
     c_win = tk.Toplevel(win)
     c_win.title('Raport kompresji')
     c_win.geometry('1200x600')
@@ -319,6 +332,12 @@ def archiving(win, folders):
 
 
 def archiving_raport(win, msg):
+    """
+    creates raport after archiving
+    :param win:
+    :param msg:
+    :return:
+    """
     a_win = tk.Toplevel(win)
     a_win.title('Raport archiwizacji')
     a_win.geometry('1200x600')
@@ -336,19 +355,6 @@ def archiving_raport(win, msg):
         else:
             la = tk.Label(a_win, text=line)
             la.pack()
-
-    """for line in msg:
-        if not str(line).__contains__('Brak'):
-            fr = tk.Frame(a_win)
-            for file in line:
-                le = tk.Label(fr, text=file)
-                le.pack()
-            fr.pack()
-
-        else:
-            # line = [element for sublist in line for element in sublist]
-            la = tk.Label(a_win, text=line)
-            la.pack()"""
 
 
 def open_archivizer(folders):
@@ -559,6 +565,12 @@ def open_user_ideas_creator(win):
 
 
 def send_idea_confirmed(window, text):
+    """
+    shows window with acknowledgment or warning
+    :param window:
+    :param text:
+    :return:
+    """
     if text == '':
         show_warning('Wpisz coś w polu pomysłu!', window)
     else:
@@ -567,6 +579,10 @@ def send_idea_confirmed(window, text):
 
 
 def open_default_raport():
+    """
+    creates default raport (all folders and files in project)
+    :return:
+    """
     raport_win = tk.Toplevel(root)
     raport_win.title('Raport ogólny')
     raport_win.geometry('1200x800')
@@ -586,6 +602,11 @@ def open_default_raport():
 
 
 def open_counting_raport(folders):
+    """
+    creates raport that counts files in every folder in project
+    :param folders:
+    :return:
+    """
     raport_win = tk.Toplevel(root)
     raport_win.title('Raport liczący')
     raport_win.geometry('1200x800')
@@ -598,7 +619,6 @@ def open_counting_raport(folders):
     for line in data:
         le = tk.Label(raport_win, text=line, font=('Helvatical bold', 22))
         le.pack()
-
 
 
 # ============================================= main ======================================
