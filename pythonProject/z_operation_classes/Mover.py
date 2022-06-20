@@ -18,7 +18,6 @@ class Mover:
             shutil.move(file_path, target_directory)
             return 0
         except shutil.Error:
-            print('Taki plik juz istnieje!')
             return -1
 
     def move_photo(self, file_path):

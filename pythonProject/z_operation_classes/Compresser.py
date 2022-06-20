@@ -34,7 +34,7 @@ class Compresser:
         # preparing for returning
         ret = []
         if os.path.exists(new_f_n):
-            ret.append(f'Plik {old_f_n} już został skompresowany! Nazywa się teraz {f_n}')
+            ret.append(f'Plik {old_f_n} już został skompresowany!\n\t\t\t\t\tNazywa się teraz {f_n}')
             return 0, ret
 
         with open(file_path, mode="rb") as fin, bz2.open(new_f_n, "wb") as fout:
@@ -59,16 +59,20 @@ class Compresser:
         ret = []
         act_f = folder.split('/')
         act_f = act_f[len(act_f) - 1]
-        ret.append(f'Folder {act_f}')
+        ret.append(f'Folder {act_f}:')
+        was_sth_to_do = False
 
         for filename in os.scandir(folder):
             act_f_s = os.path.getsize(filename.path)
             if act_f_s > MAXIMUM_FILE_SIZE:
                 msg = self.compress_file(filename.path)
                 ret.append(msg[1])
+                was_sth_to_do = True
+
+        if not was_sth_to_do:
+            ret.append(['Brak plików do komresji!'])
 
         return ret
-
 
     def compress_all_n(self, folders):
         """
@@ -81,4 +85,7 @@ class Compresser:
             ret.append(self.compress_all_files(folders[0][ext_f]))
         for rule_f in folders[1]:
             ret.append(self.compress_all_files(folders[1][rule_f]))
+
+        ret = [element for sublist in ret for element in sublist]
+
         return ret

@@ -78,4 +78,7 @@ class Archivizer:
             ret.append(self.check_in_folder(folders[0][ext_f]))
         for rule_f in folders[1]:
             ret.append(self.check_in_folder(folders[1][rule_f]))
+
+        ret = [element for sublist in ret for element in sublist]
+
         return ret

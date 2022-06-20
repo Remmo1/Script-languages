@@ -252,17 +252,26 @@ def compressing(win, folders):
     c = Compresser()
     msg = c.compress_all_n(folders)
     compressing_raport(win, msg)
-    # show_akn('Pliki zostały pomyślnie skopresowane.', win)
 
 
 def compressing_raport(win, msg):
     c_win = tk.Toplevel(win)
     c_win.title('Raport kompresji')
-    c_win.geometry('900x300')
+    c_win.geometry('1200x600')
+    c_win.config(height=1200)
+    c_win.config(width=600)
 
     for line in msg:
-        la = tk.Label(c_win, text=line)
-        la.pack()
+        if isinstance(line, list):
+            for f in line:
+                le = tk.Label(c_win, text='\t\t\t\t\t' + f)
+                le.pack()
+        elif str(line).__contains__('Folder'):
+            lc = tk.Label(c_win, text=line, font=('Helvatical bold', 22))
+            lc.pack()
+        else:
+            la = tk.Label(c_win, text=line)
+            la.pack()
 
 
 def open_compresser(folders):
@@ -307,15 +316,28 @@ def archiving(win, folders):
     a = Archivizer()
     data = a.send_to_archive_n(folders)
     archiving_raport(win, data)
-    # show_akn('Pliki zostały pomyślnie przeniesione do archiwum.', win)
 
 
 def archiving_raport(win, msg):
     a_win = tk.Toplevel(win)
     a_win.title('Raport archiwizacji')
-    a_win.geometry('900x300')
+    a_win.geometry('1200x600')
+    a_win.config(height=1200)
+    a_win.config(width=600)
 
     for line in msg:
+        if str(line).__contains__('Brak'):
+            lc = tk.Label(a_win, text=line, font=('Helvatical bold', 22))
+            lc.pack()
+        elif isinstance(line, list):
+            for f in line:
+                le = tk.Label(a_win, text='\t\t\t\t\t' + f)
+                le.pack()
+        else:
+            la = tk.Label(a_win, text=line)
+            la.pack()
+
+    """for line in msg:
         if not str(line).__contains__('Brak'):
             fr = tk.Frame(a_win)
             for file in line:
@@ -324,8 +346,9 @@ def archiving_raport(win, msg):
             fr.pack()
 
         else:
+            # line = [element for sublist in line for element in sublist]
             la = tk.Label(a_win, text=line)
-            la.pack()
+            la.pack()"""
 
 
 def open_archivizer(folders):
@@ -546,41 +569,36 @@ def send_idea_confirmed(window, text):
 def open_default_raport():
     raport_win = tk.Toplevel(root)
     raport_win.title('Raport ogólny')
-    raport_win.geometry('600x400')
-
-    scrollbar = tk.Scrollbar(raport_win)
-    scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-
-    mylist = tk.Listbox(raport_win, yscrollcommand=scrollbar.set, width=100)
+    raport_win.geometry('1200x800')
+    raport_win.config(height=1200)
+    raport_win.config(width=800)
 
     r = Raporter()
-    data = r.take_all_files()
+    data = r.folders_and_files_in_project()
 
     for line in data:
-        mylist.insert(tk.END, line)
-
-    mylist.pack(side=tk.LEFT, fill=tk.BOTH)
-    scrollbar.config(command=mylist.yview)
+        if str(line).startswith('Folder'):
+            le = tk.Label(raport_win, text=line, font=('Helvatical bold', 22))
+            le.pack()
+        else:
+            la = tk.Label(raport_win, text='\t\t' + line)
+            la.pack()
 
 
 def open_counting_raport(folders):
     raport_win = tk.Toplevel(root)
     raport_win.title('Raport liczący')
-    raport_win.geometry('600x400')
-
-    scrollbar = tk.Scrollbar(raport_win)
-    scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-
-    mylist = tk.Listbox(raport_win, yscrollcommand=scrollbar.set, width=100)
+    raport_win.geometry('1200x800')
+    raport_win.config(height=1200)
+    raport_win.config(width=800)
 
     r = Raporter()
     data = r.amount_of_files_in_all_folders(folders)
 
     for line in data:
-        mylist.insert(tk.END, line)
+        le = tk.Label(raport_win, text=line, font=('Helvatical bold', 22))
+        le.pack()
 
-    mylist.pack(side=tk.LEFT, fill=tk.BOTH)
-    scrollbar.config(command=mylist.yview)
 
 
 # ============================================= main ======================================

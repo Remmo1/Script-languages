@@ -95,7 +95,7 @@ class Raporter:
 
     @staticmethod
     def amount_of_files_in_all_folders(folders):
-        ret = [str]
+        ret = []
         for ext_f in folders[0].values():
             ret.append('Liczba plików w folderze %s: %s' %
                        (Starter.return_file_name(ext_f), Archivizer.amount_of_files_in(ext_f)))
@@ -142,5 +142,28 @@ class Raporter:
                          ' [bajtów]; po kompresji: ' + str(c.compress_file(file)[0]) + ' [bajtów]', )
         else:
             ret = ret + ('Rozmiar pliku: ' + str(f_size), )
+
+        return ret
+
+    def folders_and_files_in_project(self):
+        ret = []
+        for folder in os.scandir(PROJECT_FOLDER):
+            is_important_folder = False
+            if os.path.isdir(folder):
+                for file in os.scandir(folder):
+                    if str(file).__contains__('__ex_r__info.abc'):
+                        is_important_folder = True
+                        break
+                if is_important_folder:
+                    ret.append(folder)
+                    for file in os.scandir(folder):
+                        ret.append(file)
+
+        l = len(ret)
+        for i in range(0, l):
+            if os.path.isdir(ret[i].path):
+                ret[i] = 'Folder ' + ret[i].name
+            else:
+                ret[i] = ret[i].name
 
         return ret
