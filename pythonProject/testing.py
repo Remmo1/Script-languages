@@ -19,18 +19,23 @@ from z_operation_classes.Raporter import Raporter
 s = Starter()
 r = Raporter()
 
+"""
 f = s.search_for_folders('/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/pythonProject')
 for i in f:
     print(i)
 l = r.amount_of_files_in_all_folders(f)
 for i in l:
     print(i)
-"""
+
 print(r.files_in_folder('/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/pythonProject'))
 #folders_files = r.take_all_files()
 #print(folders_files)
-"""
 
+
+t = r.new_csv_file_arrived('/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/pythonProject/plikiCsv/covid.csv')
+for i in t:
+    print(i)
+"""
 
 
 #create_folder_for_extension('f1', 'ddd')

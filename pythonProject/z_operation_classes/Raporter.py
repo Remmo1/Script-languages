@@ -1,7 +1,12 @@
 import os
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
 
-from constst import DEFAULT_FOLDER, PHOTO_FOLDER, BINARY_FOLDER, OTHERS_FOLDER, ARCHIVE_FOLDER, PROJECT_FOLDER
+from constst import DEFAULT_FOLDER, PHOTO_FOLDER, BINARY_FOLDER, OTHERS_FOLDER, ARCHIVE_FOLDER, PROJECT_FOLDER, \
+    CSV_FOLDER, MAXIMUM_FILE_SIZE
 from z_operation_classes.Archivizer import Archivizer
+from z_operation_classes.Compresser import Compresser
 from z_operation_classes.Starting import Starter
 
 
@@ -100,5 +105,44 @@ class Raporter:
 
         return ret
 
+    def take_csv_files(self):
+        ret = []
+        for f in os.scandir(CSV_FOLDER):
+            ret.append(f)
+        return ret
+
+    def detect_new_csv_files(self, old_l, new_l):
+        ret = []
+
+        ln = len(new_l)
+        i = 0
+
+        lo = len(old_l)
+        j = 0
+
+        while True:
+            if str(old_l[j]) == str(new_l[i]):
+                break
+            ret.append(new_l[i])
+            i = i + 1
+
+        return ret
+
     def new_csv_file_arrived(self, file):
-        pass
+        df = pd.read_csv(file, sep='\t')
+        df.plot()
+        plt.show()
+
+        s = Starter()
+        f_size = os.stat(file).st_size
+        ret = (s.return_file_name(file), len(df.columns), len(df.index), list(df.columns))
+
+        if f_size > MAXIMUM_FILE_SIZE:
+            c = Compresser()
+            ret = ret + ('Rozmiar pliku przed kompresją: ' + str(f_size) + ' [bajtów]; po kompresji: ' + str(c.compress_file(file)) + ' [bajtów]', )
+        else:
+            ret = ret + ('Rozmiar pliku: ' + str(f_size), )
+
+        return ret
+
+

@@ -159,7 +159,14 @@ def move_files_from_default(win, folders):
     :return:
     """
     m = Mover()
+    r = Raporter()
+
+    o_f = r.take_csv_files()
     m.take_from_default_n(folders)
+
+    n_f = r.take_csv_files()
+    csv_raporter(win, o_f, n_f)
+
     show_akn('Pliki zostały przeniesione do odpowiednich folderów.', win)
 
 
@@ -194,6 +201,50 @@ def open_mover(folders):
         command=lambda: move_files_from_default(mover_win, folders)
     )
     mover_ok_bt.pack()
+
+
+def csv_raporter(win, old_f, new_f):
+    r = Raporter()
+    arrived = r.detect_new_csv_files(old_f, new_f)
+
+    for file in arrived:
+        csv_rap_win = tk.Toplevel(win)
+        csv_rap_win.title('Raport z pliku csv')
+        csv_rap_win.geometry('1100x500')
+        properties_f = r.new_csv_file_arrived(file.path)
+
+        title_l = tk.Label(csv_rap_win, text='Wykryto nowy plik .csv: ' + str(properties_f[0]),
+                           font=('Helvatical bold', 36))
+        title_l.pack()
+
+        col_l = tk.Label(csv_rap_win, text='Ilość kolumn: ' + str(properties_f[1]), font=('Helvatical bold', 22))
+        col_l.pack()
+
+        row_l = tk.Label(csv_rap_win, text='Ilość wierszy: ' + str(properties_f[2]), font=('Helvatical bold', 22))
+        row_l.pack()
+
+        size_l = tk.Label(csv_rap_win, text=str(properties_f[4]), font=('Helvatical bold', 18))
+        size_l.pack()
+
+        scroll_l = tk.Label(csv_rap_win, text='Spis kolumn:', font=('Helvatical bold', 22))
+        scroll_l.pack()
+
+        scr = tk.Scrollbar(csv_rap_win)
+        scr.pack(side=tk.RIGHT, fill=tk.Y)
+
+        mylist = tk.Listbox(csv_rap_win, yscrollcommand=scr.set, width=100, font=('Helvatical bold', 20))
+
+        data = properties_f[3]
+
+        for line in data:
+            mylist.insert(tk.END, line)
+
+        mylist.pack(side=tk.LEFT, fill=tk.BOTH)
+        scr.config(command=mylist.yview)
+
+
+
+
 
 
 def compressing(win, folders):

@@ -41,9 +41,12 @@ class Compresser:
         file_s = file_path.split('/')
         file_s = file_s[len(file_s) - 1]
 
+        n_f_s = os.stat(new_f_n).st_size
         print(f'\tPlik {file_s}:')
         print(f'\tPrzed kompresją: {os.stat(file_path).st_size:,}')
-        print(f'\tPo kompresji: {os.stat(new_f_n).st_size:,}')
+        print(f'\tPo kompresji: {n_f_s:,}')
+
+        return n_f_s
 
     def compress_all_files(self, folder):
         """
