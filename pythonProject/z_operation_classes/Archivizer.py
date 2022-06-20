@@ -40,6 +40,7 @@ class Archivizer:
         """
         folder_name = folder.split('/')
         folder_name = folder_name[len(folder_name) - 1]
+        ret = []
 
         if self.amount_of_files_in(folder) > MAXIMUM_AMOUNT_OF_FILES:
             taken_files = []
@@ -52,17 +53,19 @@ class Archivizer:
             taken_files = sorted(taken_files, key=cmp_to_key(self.comparator))
             i = len(taken_files)
 
-            print('Status plikow w folderze %s' % folder_name)
+            ret = ['Status plikow w folderze %s' % folder_name]
+
             for f in taken_files:
                 f_n = f[1].split('/')
                 f_n = f_n[len(f_n) - 1]
-                print(f'Czas życia pliku {f_n}: {f[0].seconds} [s] i {f[0].microseconds} [ms]')
+                ret.append(f'Czas życia pliku {f_n}: {f[0].seconds} [s] i {f[0].microseconds} [ms]')
 
             while i > MAXIMUM_AMOUNT_OF_FILES:
                 Mover.move_file_to(taken_files[i - 1][1], ARCHIVE_FOLDER)
                 i = i - 1
         else:
-            print('Brak plikow do archiwizacji / usuniecia w folderze %s' % folder_name)
+            ret.append('Brak plikow do archiwizacji / usuniecia w folderze %s' % folder_name)
+        return ret
 
     def send_to_archive_n(self, folders):
         """
@@ -70,7 +73,9 @@ class Archivizer:
         :param folders:
         :return:
         """
+        ret = []
         for ext_f in folders[0]:
-            self.check_in_folder(folders[0][ext_f])
+            ret.append(self.check_in_folder(folders[0][ext_f]))
         for rule_f in folders[1]:
-            self.check_in_folder(folders[1][rule_f])
+            ret.append(self.check_in_folder(folders[1][rule_f]))
+        return ret

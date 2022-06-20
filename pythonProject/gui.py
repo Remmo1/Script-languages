@@ -11,7 +11,6 @@ from z_operation_classes.Raporter import Raporter
 from z_operation_classes.Starting import Starter
 from z_operation_classes.UserFunctions import Userfunctions
 
-
 """ main project window """
 root = Tk()
 
@@ -243,10 +242,6 @@ def csv_raporter(win, old_f, new_f):
         scr.config(command=mylist.yview)
 
 
-
-
-
-
 def compressing(win, folders):
     """
     uses compress_all_n function that compress every file in the project when neccessary
@@ -255,8 +250,19 @@ def compressing(win, folders):
     :return:
     """
     c = Compresser()
-    c.compress_all_n(folders)
-    show_akn('Pliki zostały pomyślnie skopresowane.', win)
+    msg = c.compress_all_n(folders)
+    compressing_raport(win, msg)
+    # show_akn('Pliki zostały pomyślnie skopresowane.', win)
+
+
+def compressing_raport(win, msg):
+    c_win = tk.Toplevel(win)
+    c_win.title('Raport kompresji')
+    c_win.geometry('900x300')
+
+    for line in msg:
+        la = tk.Label(c_win, text=line)
+        la.pack()
 
 
 def open_compresser(folders):
@@ -299,8 +305,27 @@ def archiving(win, folders):
     :return:
     """
     a = Archivizer()
-    a.send_to_archive_n(folders)
-    show_akn('Pliki zostały pomyślnie przeniesione do archiwum.', win)
+    data = a.send_to_archive_n(folders)
+    archiving_raport(win, data)
+    # show_akn('Pliki zostały pomyślnie przeniesione do archiwum.', win)
+
+
+def archiving_raport(win, msg):
+    a_win = tk.Toplevel(win)
+    a_win.title('Raport archiwizacji')
+    a_win.geometry('900x300')
+
+    for line in msg:
+        if not str(line).__contains__('Brak'):
+            fr = tk.Frame(a_win)
+            for file in line:
+                le = tk.Label(fr, text=file)
+                le.pack()
+            fr.pack()
+
+        else:
+            la = tk.Label(a_win, text=line)
+            la.pack()
 
 
 def open_archivizer(folders):
