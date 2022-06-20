@@ -81,8 +81,4 @@ class Compresser:
             ret.append(self.compress_all_files(folders[0][ext_f]))
         for rule_f in folders[1]:
             ret.append(self.compress_all_files(folders[1][rule_f]))
-
-        for i in ret:
-            print(i)
-
         return ret
