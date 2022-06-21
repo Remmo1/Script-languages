@@ -1,7 +1,7 @@
 from unittest import TestCase
 import os
 
-from constst import DEFAULT_FOLDER
+from constst import DEFAULT_FOLDER, TEST_FOLDER, ARCHIVE_FOLDER
 from z_operation_classes.Archivizer import Archivizer
 from z_operation_classes.Compresser import Compresser
 from z_operation_classes.Deleter import Deleter
@@ -43,7 +43,13 @@ class Test(TestCase):
         self.assertEqual(3, a.amount_of_files_in(self.t_path))
 
     def test_send_to_archive(self):
-        pass
+        a = Archivizer
+        m = Mover
+        m.move_file_to('/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/pythonProject/test_folder/t_ph1.jpg',
+                       ARCHIVE_FOLDER)
+        self.assertEqual(2, a.amount_of_files_in(self.t_path))
+        m.move_file_to('/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/pythonProject/test_folder/t_ph1.jpg',
+                       TEST_FOLDER)
 
     def test_compressing(self):
         pass

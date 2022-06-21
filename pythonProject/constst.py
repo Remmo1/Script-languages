@@ -10,6 +10,7 @@ ARCHIVE_FOLDER = '/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/pyth
 PROJECT_FOLDER = '/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/pythonProject'
 IDEAS_FOLDER = '/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/pythonProject/users_ideas'
 CSV_FOLDER = '/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/pythonProject/plikiCsv'
+TEST_FOLDER = '/media/remmo/Acer/Uczelnia/Semestr4/Jezyki Skryptowe/laby/pythonProject/test_folder'
 
 MAXIMUM_AMOUNT_OF_FILES = 4
 MAXIMUM_FILE_SIZE = 3000000
